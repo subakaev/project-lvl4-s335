@@ -6,14 +6,17 @@ dotenv.config();
 
 const app = new Koa();
 
-const rollbar = new Rollbar(process.env.ROLLBAR_ACCESS_TOKEN);
-app.use(async (ctx, next) => {
-  try {
-    await next();
-  } catch (err) {
-    rollbar.error(err, ctx.request);
-  }
-});
+if (process.env.NODE_ENV === 'production') {
+  const rollbar = new Rollbar(process.env.ROLLBAR_ACCESS_TOKEN);
+
+  app.use(async (ctx, next) => {
+    try {
+      await next();
+    } catch (err) {
+      rollbar.error(err, ctx.request);
+    }
+  });
+}
 
 app.use(async (ctx) => {
   ctx.body = 'Hello World';

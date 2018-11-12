@@ -36,6 +36,7 @@
     "@babel/core": "^7.1.5",
     "@babel/node": "^7.0.0",
     "@babel/preset-env": "^7.1.5",
-    "koa": "^2.6.2"
+    "koa": "^2.6.2",
+    "rollbar": "^2.5.0"
   }
 }

@@ -36,8 +36,14 @@
     "@babel/core": "^7.1.5",
     "@babel/node": "^7.0.0",
     "@babel/preset-env": "^7.1.5",
+    "autoprefixer": "^9.3.1",
+    "babel-loader": "^8.0.4",
+    "css-loader": "^1.0.1",
     "dotenv": "^6.1.0",
     "koa": "^2.6.2",
-    "rollbar": "^2.5.0"
+    "postcss-loader": "^3.0.0",
+    "rollbar": "^2.5.0",
+    "style-loader": "^0.23.1",
+    "webpack": "^4.25.1"
   }
 }

@@ -2,7 +2,7 @@ install:
 	npm install
 
 start:
-	npx babel-node src/app.js
+	npx babel-node index.js
 
 build:
 	rm -rf dist

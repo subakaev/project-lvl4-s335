@@ -1,4 +1,4 @@
-import autoprefixer from 'autoprefixer';
+var autoprefixer = require('autoprefixer');
 
 module.exports = {
   mode: process.env.NODE_ENV || 'development',

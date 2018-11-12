@@ -15,5 +15,11 @@
   "bugs": {
     "url": "https://github.com/subakaev/project-lvl4-s335/issues"
   },
-  "homepage": "https://github.com/subakaev/project-lvl4-s335#readme"
+  "homepage": "https://github.com/subakaev/project-lvl4-s335#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.1.5",
+    "@babel/core": "^7.1.5",
+    "@babel/node": "^7.0.0",
+    "@babel/preset-env": "^7.1.5"
+  }
 }

@@ -1,10 +1,12 @@
 import Koa from 'koa';
 import Rollbar from 'rollbar';
+import dotenv from 'dotenv';
 
-const rollbar = new Rollbar('POST_SERVER_ITEM_ACCESS_TOKEN');
+dotenv.config();
 
 const app = new Koa();
 
+const rollbar = new Rollbar(process.env.ROLLBAR_ACCESS_TOKEN);
 app.use(async (ctx, next) => {
   try {
     await next();

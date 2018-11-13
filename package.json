@@ -7,6 +7,7 @@
     "test": "jest",
     "eslint": "eslint",
     "babel-node": "babel-node",
+    "sequelize": "sequelize",
     "start": "babel-node index.js",
     "webpack": "webpack",
     "build": "npm run webpack -- -p --env production && babel src --out-dir dist --source-maps inline",
@@ -49,6 +50,8 @@
     "koa-pug": "^3.0.0-2",
     "postcss-loader": "^3.0.0",
     "rollbar": "^2.5.0",
+    "sequelize": "^4.41.2",
+    "sequelize-cli": "^5.3.0",
     "style-loader": "^0.23.1",
     "webpack": "^4.25.1"
   }

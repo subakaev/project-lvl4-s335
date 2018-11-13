@@ -21,9 +21,10 @@ if (process.env.NODE_ENV === 'production') {
 
 const pug = new Pug({
   viewPath: './src/views',
-  debug: false,
-  pretty: false,
-  compileDebug: false,
+  noCache: process.env.NODE_ENV === 'development',
+  debug: true,
+  pretty: true,
+  compileDebug: true,
   locals: {},
   basedir: __dirname,
   helperPath: [],

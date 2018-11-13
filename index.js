@@ -1,4 +1,5 @@
 import Koa from 'koa';
+import Pug from 'koa-pug';
 import Rollbar from 'rollbar';
 import dotenv from 'dotenv';
 
@@ -18,8 +19,20 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
+const pug = new Pug({
+  viewPath: './src/views',
+  debug: false,
+  pretty: false,
+  compileDebug: false,
+  locals: {},
+  basedir: __dirname,
+  helperPath: [],
+});
+
+pug.use(app);
+
 app.use(async (ctx) => {
-  ctx.body = 'Hello World';
+  await ctx.render('index');
 });
 
 app.listen(process.env.PORT || 3000);

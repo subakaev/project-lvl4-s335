@@ -1,11 +1,16 @@
-import Koa from 'koa';
-import Pug from 'koa-pug';
 import Rollbar from 'rollbar';
 import dotenv from 'dotenv';
+import path from 'path';
+
+import Koa from 'koa';
+import Pug from 'koa-pug';
+import serve from 'koa-static';
 
 dotenv.config();
 
 const app = new Koa();
+
+app.use(serve(path.join(__dirname, 'dist')));
 
 if (process.env.NODE_ENV === 'production') {
   const rollbar = new Rollbar(process.env.ROLLBAR_ACCESS_TOKEN);

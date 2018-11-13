@@ -5,9 +5,9 @@ module.exports = {
   mode: process.env.NODE_ENV || 'development',
   entry: ['./src/index.js'],
   output: {
-    // path: path.join(__dirname, 'dist', 'assets'),
+    path: path.join(__dirname, 'dist', 'assets'),
     // filename: 'application.js',
-    publicPath: '/assets/'
+    // publicPath: '/assets/'
   },
   module: {
     rules: [
@@ -24,19 +24,13 @@ module.exports = {
           },
           {
             loader: 'css-loader',
-            options: {
-              sourceMap: true,
-            },
           },
           {
             loader: 'postcss-loader',
             options: {
               plugins: [
-                autoprefixer({
-                  browsers: ['ie >= 8', 'last 4 version'],
-                }),
+                require('autoprefixer'),
               ],
-              sourceMap: true,
             },
           },
         ],

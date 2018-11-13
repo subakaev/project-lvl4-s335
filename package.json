@@ -52,6 +52,7 @@
     "rollbar": "^2.5.0",
     "sequelize": "^4.41.2",
     "sequelize-cli": "^5.3.0",
+    "sqlite3": "^4.0.4",
     "style-loader": "^0.23.1",
     "webpack": "^4.25.1"
   }

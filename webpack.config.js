@@ -1,10 +1,13 @@
+var path = require('path');
 var autoprefixer = require('autoprefixer');
 
 module.exports = {
   mode: process.env.NODE_ENV || 'development',
   entry: ['./src/index.js'],
   output: {
-    publicPath: '/assets/',
+    // path: path.join(__dirname, 'dist', 'assets'),
+    // filename: 'application.js',
+    publicPath: '/assets/'
   },
   module: {
     rules: [

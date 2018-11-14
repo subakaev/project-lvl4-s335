@@ -2,7 +2,7 @@ install:
 	npm install
 
 start:
-	npx babel-node index.js
+	npm run start
 
 build:
 	rm -rf dist

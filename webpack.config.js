@@ -1,5 +1,6 @@
 var path = require('path');
-var autoprefixer = require('autoprefixer');
+
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   mode: process.env.NODE_ENV || 'development',
@@ -37,4 +38,9 @@ module.exports = {
       },
     ],
   },
+  plugins: [
+    new CopyWebpackPlugin([
+      {from:'src/img',to:'img'} 
+    ]),
+  ],
 };

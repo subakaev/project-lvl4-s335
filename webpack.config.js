@@ -1,10 +1,15 @@
 var path = require('path');
 
+var webpack = require('webpack');
+
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   mode: process.env.NODE_ENV || 'development',
-  entry: ['./src/index.js'],
+  entry: {
+    main: ['./src'],
+    bundle: ['jquery', 'popper.js', 'bootstrap'],
+  },
   output: {
     path: path.join(__dirname, 'dist', 'assets'),
     // filename: 'application.js',
@@ -39,6 +44,12 @@ module.exports = {
     ],
   },
   plugins: [
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery',
+      'window.jQuery': 'jquery',
+      Popper: ['popper.js', 'default'],
+    }),
     new CopyWebpackPlugin([
       {from:'src/img',to:'img'} 
     ]),

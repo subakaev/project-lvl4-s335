@@ -4,14 +4,15 @@ html(lang="en")
     title Simple Task Manager
     link(rel='icon' type='image/png' href='/assets/img/logo_03.png')
     script(src='/assets/main.js')
+    script(src='/assets/bundle.js')
   body
-    nav.navbar.navbar-dark.bg-dark
+    nav.navbar.navbar-expand-sm.navbar-dark.bg-dark
       a.navbar-brand(href='#')
-        img(src='/assets/img/logo_03.png' width='30' height='30' class='d-inline-block align-top' alt='')
+        img.d-inline-block.align-top(src='/assets/img/logo_03.png' width='30' height='30' alt='')
         span.ml-2 Task Manager
-      button.navbar-toggler(data-toggle="collapse" data-target="#navbarSupportedContent")
+      button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbarNav' aria-controls='navbarNav' aria-expanded='false' aria-label='Toggle navigation')
         span.navbar-toggler-icon
-      div.navbar-collapse(id='navbarNav')
+      .collapse.navbar-collapse(id='navbarNav')
         .navbar-nav
-          a(class='nav-item nav-link active' href='#') Tasks
-          a(class='nav-item nav-link' href='#') Users 
+          a.nav-item.nav-link.active(href='#') Tasks
+          a.nav-item.nav-link(href='#') Users 

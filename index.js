@@ -44,7 +44,9 @@ export default () => {
     compileDebug: true,
     locals: {},
     basedir: path.join(__dirname, '/src/views'),
-    helperPath: [],
+    helperPath: [
+      { urlFor: (...args) => router.url(...args) },
+    ],
   });
 
   pug.use(app);

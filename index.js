@@ -5,6 +5,9 @@ import path from 'path';
 import Koa from 'koa';
 import Pug from 'koa-pug';
 import serve from 'koa-static';
+import Router from 'koa-router';
+
+import addRoutes from './routes';
 
 export default () => {
   dotenv.config();
@@ -25,6 +28,14 @@ export default () => {
     });
   }
 
+  const router = new Router();
+
+  addRoutes(router);
+
+  app
+    .use(router.routes())
+    .use(router.allowedMethods());
+
   const pug = new Pug({
     viewPath: './src/views',
     noCache: process.env.NODE_ENV === 'development',
@@ -37,10 +48,6 @@ export default () => {
   });
 
   pug.use(app);
-
-  app.use(async (ctx) => {
-    await ctx.render('index');
-  });
 
   return app;
 };

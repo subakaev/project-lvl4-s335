@@ -53,6 +53,7 @@
     "jquery": "^3.3.1",
     "koa": "^2.6.2",
     "koa-pug": "^3.0.0-2",
+    "koa-router": "^7.4.0",
     "koa-static": "^5.0.0",
     "popper.js": "^1.14.5",
     "postcss-loader": "^3.0.0",

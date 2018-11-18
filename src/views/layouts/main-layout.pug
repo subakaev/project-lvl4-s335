@@ -1,0 +1,23 @@
+doctype html
+html(lang="en")
+  head
+    title Simple Task Manager
+    link(rel='icon' type='image/png' href='/assets/img/logo_03.png')
+    script(src='/assets/main.js')
+    script(src='/assets/bundle.js')
+  body
+    nav.navbar.navbar-expand-sm.navbar-dark.bg-dark
+      a.navbar-brand(href='/')
+        img.d-inline-block.align-top(src='/assets/img/logo_03.png' width='30' height='30' alt='')
+        span.ml-2 Task Manager
+      button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbarNav' aria-controls='navbarNav' aria-expanded='false' aria-label='Toggle navigation')
+        span.navbar-toggler-icon
+      .collapse.navbar-collapse(id='navbarNav')
+        .navbar-nav.mr-auto
+          a.nav-item.nav-link.active(href='/tasks') Tasks
+          a.nav-item.nav-link(href='/users') Users
+        .navbar-nav
+          a.btn.btn-outline-light.mr-2(href='/login') Log In
+          a.btn.btn-primary(href='/register') Sign Up
+    .container
+      block content

@@ -37,13 +37,13 @@ export default () => {
     .use(router.allowedMethods());
 
   const pug = new Pug({
-    viewPath: './src/views',
+    viewPath: path.join(__dirname, '/src/views'),
     noCache: process.env.NODE_ENV === 'development',
     debug: true,
     pretty: true,
     compileDebug: true,
     locals: {},
-    basedir: __dirname,
+    basedir: path.join(__dirname, '/src/views'),
     helperPath: [],
   });
 

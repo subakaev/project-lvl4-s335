@@ -2,7 +2,7 @@ install:
 	npm install
 
 start:
-	npm run start
+	npx nodemon --watch .  --ext '.js','.pug' --exec npx gulp server
 
 build:
 	rm -rf dist

@@ -7,7 +7,7 @@ describe('requests', () => {
   let server;
 
   beforeAll(() => {
-    jasmine.addMatchers(matchers);
+    jest.addMatchers(matchers);
   });
 
   beforeEach(() => {

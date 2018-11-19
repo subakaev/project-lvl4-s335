@@ -4,11 +4,8 @@ module.exports = {
     dialect: 'sqlite',
   },
   test: {
-    username: '',
-    password: '',
-    database: '',
-    host: '127.0.0.1',
-    dialect: 'mysql',
+    storage: ':memory:',
+    dialect: 'sqlite',
   },
   production: {
     username: process.env.DATABASE_USER,

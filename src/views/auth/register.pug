@@ -1,22 +1,24 @@
 extends /layouts/auth-layout.pug
 
 block content
-  form
+  form(action=urlFor('createUser') method='post')
     h1(class='h5 my-3 text-center font-weight-normal') Sign Up
     .form-group
+      - const className = errors['email'] ? 'form-control is-invalid' : 'form-control'
       label(for='inputEmail' class='sr-only') Email address
-      input(type='email' id='inputEmail' class='form-control' placeholder='Email address' required autofocus)
+      input(type='email' name='form.email' id='inputEmail' class= className placeholder='Email address' required autofocus)
+      .invalid-feedback= errors['email'] ? errors['email'][0].message : ''
     .form-group
       label(for='inputFirstName' class='sr-only') Email address
-      input(type='text' id='inputFirstName' class='form-control' placeholder='First name' required)
+      input(type='text' name='form.firstName' id='inputFirstName' class='form-control' placeholder='First name' required)
     .form-group
       label(for='inputLastName' class='sr-only') Email address
-      input(type='text' id='inputLastName' class='form-control' placeholder='Last name' required)
+      input(type='text' name='form.lastName' id='inputLastName' class='form-control' placeholder='Last name' required)
     .form-group
       label(for='inputPassword' class='sr-only') Password
-      input(type='password' id='inputPassword' class='form-control' placeholder='Password' required)
+      input(type='password' name='form.password' id='inputPassword' class='form-control' placeholder='Password' required)
     .form-group
       label(for='inputConfirmPassword' class='sr-only') Password
-      input(type='password' id='inputConfirmPassword' class='form-control' placeholder='Confirm password' required)
+      input(type='password' name='form.confirmPassword' id='inputConfirmPassword' class='form-control' placeholder='Confirm password' required)
     .form-group
       button(class='btn btn-lg btn-primary btn-block' type='submit') Sing Up

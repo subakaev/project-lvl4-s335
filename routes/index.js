@@ -14,7 +14,7 @@ export default (router) => {
   router.get('register', '/register', (ctx) => {
     ctx.render('auth/register', { form: {}, errors: {} });
   });
-  router.post('createUser', '/register', async (ctx) => {
+  router.post('register', '/register', async (ctx) => {
     const { form } = ctx.request.body;
 
     const user = User.build(form);
@@ -24,7 +24,7 @@ export default (router) => {
       // ctx.flash.set('User has been created');
       ctx.redirect(router.url('root'));
     } catch (e) {
-      console.log(_.groupBy(e.errors, 'path'));
+      //console.log(_.groupBy(e.errors, 'path'));
       ctx.render('auth/register', { form, errors: _.groupBy(e.errors, 'path') });
     }
   });

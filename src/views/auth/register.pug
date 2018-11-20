@@ -1,13 +1,14 @@
 extends /layouts/auth-layout.pug
 
 block content
-  form(action=urlFor('createUser') method='post')
+  form(action=urlFor('register') method='post' novalidate)
     h1(class='h5 my-3 text-center font-weight-normal') Sign Up
     .form-group
-      - const className = errors['email'] ? 'form-control is-invalid' : 'form-control'
+      - const className = errors['email'] && 'form-control is-invalid' || 'form-control'
       label(for='inputEmail' class='sr-only') Email address
-      input(type='email' name='form.email' id='inputEmail' class= className placeholder='Email address' required autofocus)
-      .invalid-feedback= errors['email'] ? errors['email'][0].message : ''
+      input(type='email' name='form.email' value= form.email id='inputEmail' class= className placeholder='Email address' required autofocus)
+      if errors.email
+        .invalid-feedback= errors['email'][0].message
     .form-group
       label(for='inputFirstName' class='sr-only') Email address
       input(type='text' name='form.firstName' id='inputFirstName' class='form-control' placeholder='First name' required)

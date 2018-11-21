@@ -20,4 +20,7 @@ html(lang="en")
           a.btn.btn-outline-light.mr-2(href=urlFor('login')) Log In
           a.btn.btn-primary(href=urlFor('register')) Sign Up
     .container
+      - const msg = flash.get()
+      if msg
+        .alert.alert-info.m-3= msg
       block content

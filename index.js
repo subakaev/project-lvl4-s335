@@ -7,6 +7,8 @@ import Pug from 'koa-pug';
 import serve from 'koa-static';
 import Router from 'koa-router';
 import bodyParser from 'koa-bodyparser';
+import flash from 'koa-flash-simple';
+import session from 'koa-session';
 
 import addRoutes from './routes';
 
@@ -26,6 +28,16 @@ export default () => {
       }
     });
   }
+
+  app.keys = ['some secret hurr'];
+  app.use(session(app));
+  app.use(flash());
+  app.use(async (ctx, next) => {
+    ctx.state = {
+      flash: ctx.flash,
+    };
+    await next();
+  });
 
   app.use(bodyParser());
   app.use(serve(path.join(__dirname, 'dist')));

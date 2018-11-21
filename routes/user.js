@@ -23,7 +23,7 @@ export default (router) => {
 
     try {
       await user.save();
-      // ctx.flash.set('User has been created');
+      ctx.flash.set('User has been created');
       ctx.redirect(router.url('root'));
     } catch (e) {
       ctx.render('auth/register', { form, errors: _.groupBy(e.errors, 'path') });

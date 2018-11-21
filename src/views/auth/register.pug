@@ -1,21 +1,11 @@
 extends /layouts/auth-layout.pug
 
-mixin createInput(params)
-  if params.isRequied && params.isAutofocus
-    input(type= params.type name= params.name value= params.value id= params.id class= params.className placeholder= params.placeholder required autofocus)
-  else if params.isRequired
-    input(type= params.type name= params.name value= params.value id= params.id class= params.className placeholder= params.placeholder required)
-  else if params.isAutofocus
-    input(type= params.type name= params.name value= params.value id= params.id class= params.className placeholder= params.placeholder autofocus)
-  else
-    input(type= params.type name= params.name value= params.value id= params.id class= params.className placeholder= params.placeholder)
-
 mixin createInputGroup(propName, inputType, labelMsg, dataObj, errors)
   .form-group
     - const className = errors[propName] && 'form-control is-invalid' || 'form-control'
     - const inputId = `input${propName}`
     label(for= inputId class='sr-only')= labelMsg
-    input(type= inputType name= `form.${propName}` value=dataObj[propName] id= inputId class= className placeholder= labelMsg = isRequied)
+    input(type= inputType name= `form.${propName}` value=dataObj[propName] id= inputId class= className placeholder= labelMsg)
     if errors[propName]
       .invalid-feedback= errors[propName].map(({ message }) => message).join('. ')
 

@@ -16,6 +16,11 @@ export default (router) => {
 
     const user = User.build(form);
 
+    if (form.password !== form.confirmPassword) {
+      ctx.render('auth/register', { form, errors: { confirmPassword: [{ message: 'Passwords not match.' }] } });
+      return;
+    }
+
     try {
       await user.save();
       // ctx.flash.set('User has been created');

@@ -3,28 +3,41 @@ export default (sequelize, DataTypes) => {
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
+      unique: {
+        msg: 'User with this email already exists',
+      },
       validate: {
-        isEmail: true,
+        notEmpty: {
+          msg: 'Email cannot be empty',
+        },
+        isEmail: {
+          msg: 'Email format is incorrect',
+        },
       },
     },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        notEmpty: true,
+        notEmpty: {
+          msg: 'Password cannot be empty',
+        },
       },
     },
     firstName: {
       type: DataTypes.STRING,
       validate: {
-        notEmpty: true,
+        notEmpty: {
+          msg: 'First name cannot be empty',
+        },
       },
     },
     lastName: {
       type: DataTypes.STRING,
       validate: {
-        notEmpty: true,
+        notEmpty: {
+          msg: 'Last name cannot be empty',
+        },
       },
     },
   }, {});

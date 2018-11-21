@@ -69,6 +69,7 @@
     "sequelize-cli": "^5.3.0",
     "sqlite3": "^4.0.4",
     "style-loader": "^0.23.1",
+    "validate.js": "^0.12.0",
     "webpack": "^4.25.1"
   }
 }

@@ -1,13 +1,13 @@
 extends /layouts/auth-layout.pug
 
+include /mixins/forms.pug
+
 block content
-  form
+  form(action=urlFor('login') method='post' novalidate)
     h1(class='h5 my-3 text-center font-weight-normal') Sign In
-    .form-group
-      label(for='inputEmail' class='sr-only') Email address
-      input(type='email' id='inputEmail' class='form-control' placeholder='Email address' required autofocus)
-    .form-group
-      label(for='inputPassword' class='sr-only') Password
-      input(type='password' id='inputPassword' class='form-control' placeholder='Password' required)
+    if errors['summary']
+      .alert.alert-danger= errors['summary'].map(({ message }) => message).join('. ')
+    +createInputGroup('userName', 'text', 'User name', form, errors)
+    +createInputGroup('password', 'password', 'Password', form, errors)
     .form-group
       button(class='btn btn-lg btn-primary btn-block' type='submit') Sing In

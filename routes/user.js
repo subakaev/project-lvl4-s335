@@ -1,10 +1,53 @@
 import _ from 'lodash';
+import validator from 'validate.js';
 
 import { User } from '../models';
 
 export default (router) => {
   router.get('login', '/login', (ctx) => {
-    ctx.render('auth/login');
+    ctx.render('auth/login', { form: {}, errors: {} });
+  });
+
+  router.post('login', '/login', async (ctx) => {
+    const { form } = ctx.request.body;
+
+    const constraints = {
+      userName: {
+        presence: true,
+        length: {
+          minimum: 1,
+          tooShort: { message: 'User name cannot be empty' },
+        },
+      },
+      password: {
+        presence: true,
+        length: {
+          minimum: 1,
+          tooShort: { message: 'Password cannot be empty' },
+        },
+      },
+    };
+
+    const result = validator.validate(form, constraints);
+
+    if (result) {
+      ctx.render('auth/login', { form, errors: result });
+      return;
+    }
+
+    const user = await User.findOne({
+      where: {
+        email: form.userName,
+      },
+    });
+
+    if (user && user.password === form.password) {
+      ctx.session.userId = user.id;
+      ctx.redirect(router.url('root'));
+      return;
+    }
+
+    ctx.render('auth/login', { form: {}, errors: { summary: [{ message: 'User name or password is incorrect' }] } });
   });
 
   router.get('register', '/register', (ctx) => {

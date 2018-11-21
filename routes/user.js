@@ -4,6 +4,11 @@ import validator from 'validate.js';
 import { User } from '../models';
 
 export default (router) => {
+  router.get('logout', '/logout', (ctx) => {
+    ctx.session.userId = undefined;
+    ctx.redirect(router.url('login'));
+  });
+
   router.get('login', '/login', (ctx) => {
     ctx.render('auth/login', { form: {}, errors: {} });
   });

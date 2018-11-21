@@ -16,9 +16,13 @@ html(lang="en")
         .navbar-nav.mr-auto
           a.nav-item.nav-link.active(href=urlFor('tasks')) Tasks
           a.nav-item.nav-link(href=urlFor('users')) Users
-        .navbar-nav
-          a.btn.btn-outline-light.mr-2(href=urlFor('login')) Log In
-          a.btn.btn-primary(href=urlFor('register')) Sign Up
+        if isAuthenticated()
+          .navbar-nav
+            a.btn.btn-outline-light.mr-2(href=urlFor('logout')) Log Out
+        else
+          .navbar-nav
+            a.btn.btn-outline-light.mr-2(href=urlFor('login')) Log In
+            a.btn.btn-primary(href=urlFor('register')) Sign Up
     .container
       - const msg = flash.get()
       if msg

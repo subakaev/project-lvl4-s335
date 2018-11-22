@@ -88,4 +88,10 @@ export default (router) => {
 
     ctx.render('users/profile', { user });
   });
+
+  router.get('changePassword', '/changePassword', async (ctx) => {
+    const user = await User.findById(ctx.session.userId);
+
+    ctx.render('users/changePassword', { form: {}, errors: {} });
+  });
 };

@@ -23,8 +23,13 @@ html(lang="en")
           +addNavLink(urlFor('users'), 'Users')
         if isAuthenticated()
           .navbar-nav
-            a.btn.btn-outline-info.mr-2(href=urlFor('profile')) Edit Profile
-            a.btn.btn-outline-light.mr-2(href=urlFor('logout')) Log Out
+            .btn-group
+              button.btn.btn-outline-info.dropdown-toggle(type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false') User email
+              .dropdown-menu.dropdown-menu-right
+                a.dropdown-item(href=urlFor('profile')) Profile
+                a.dropdown-item(href=urlFor('changePassword')) Change password
+                .dropdown-divider
+                a.dropdown-item(href=urlFor('logout')) Logout
         else
           .navbar-nav
             a.btn.btn-outline-light.mr-2(href=urlFor('login')) Log In

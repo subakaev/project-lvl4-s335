@@ -1,3 +1,5 @@
+import { encrypt } from '../lib/secure';
+
 export default (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
     email: {
@@ -15,9 +17,20 @@ export default (sequelize, DataTypes) => {
         },
       },
     },
-    password: {
+    passwordDigest: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
+    password: {
+      type: DataTypes.VIRTUAL,
+      set: (value) => {
+        this.setDataValue('passwordDigest', encrypt(value));
+        this.setDataValue('password', value);
+        return value;
+      },
       validate: {
         notEmpty: {
           msg: 'Password cannot be empty',

@@ -1,4 +1,21 @@
 extends /layouts/main-layout.pug
 
 block content
-  h1 Users list will be there soon.
+  .my-3.text-center 
+    h3 List of users
+  table.table.table-striped
+    thead.thead-light
+      tr
+        th #
+        th Id
+        th Email
+        th First name
+        th Last name
+    tbody
+      each user, index in users
+        tr
+          td= index
+          td= user.id
+          td= user.email
+          td= user.firstName
+          td= user.lastName

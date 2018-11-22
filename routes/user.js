@@ -78,7 +78,8 @@ export default (router) => {
     }
   });
 
-  router.get('users', '/users', (ctx) => {
-    ctx.render('users/index');
+  router.get('users', '/users', async (ctx) => {
+    const users = await User.findAll();
+    ctx.render('users/index', { users });
   });
 };

@@ -23,6 +23,7 @@ html(lang="en")
           +addNavLink(urlFor('users'), 'Users')
         if isAuthenticated()
           .navbar-nav
+            a.btn.btn-outline-info.mr-2(href=urlFor('profile')) Edit Profile
             a.btn.btn-outline-light.mr-2(href=urlFor('logout')) Log Out
         else
           .navbar-nav

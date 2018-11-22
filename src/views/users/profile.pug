@@ -1,0 +1,22 @@
+extends /layouts/main-layout.pug
+
+include /mixins/forms.pug
+
+block content
+  form(action=urlFor('profile') method='post' novalidate)
+    h1.h5.my-3.text-center.font-weight-normal Edit profile
+    .form-group
+      label(for='inputId') User id
+      input(type='text' name='inputId' value=user.id id='inputId' class='form-control' disabled)
+    .form-group
+      label(for='inputEmail') Email
+      input(type='email' name='inputEmail' value=user.email id='inputEmail' class='form-control' disabled)
+    .form-group
+      label(for='inputFirstName') First name
+      input(type='text' name='inputFirstName' value=user.firstName id='inputFirstName' class='form-control')
+    .form-group
+      label(for='inputLastName') Last name
+      input(type='text' name='inputLastName' value=user.lastName id='inputLastName' class='form-control')
+    .form-group
+      button(class='btn btn-lg btn-primary btn-block' type='submit') Update profile
+      a.btn.btn-lg.btn-danger.btn-block(href='#') Delete profile

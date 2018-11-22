@@ -82,4 +82,10 @@ export default (router) => {
     const users = await User.findAll();
     ctx.render('users/index', { users });
   });
+
+  router.get('profile', '/profile', async (ctx) => {
+    const user = await User.findById(ctx.session.userId);
+
+    ctx.render('users/profile', { user });
+  });
 };

@@ -1,3 +1,8 @@
+- const tryAddActiveClass = (url) => currentUrl === url ? 'active' : '';
+
+mixin addNavLink(url, name)
+  a.nav-item.nav-link(class= tryAddActiveClass(url) href= url)= name
+
 doctype html
 html(lang="en")
   head
@@ -14,8 +19,8 @@ html(lang="en")
         span.navbar-toggler-icon
       .collapse.navbar-collapse(id='navbarNav')
         .navbar-nav.mr-auto
-          a.nav-item.nav-link.active(href=urlFor('tasks')) Tasks
-          a.nav-item.nav-link(href=urlFor('users')) Users
+          +addNavLink(urlFor('tasks'), 'Tasks')
+          +addNavLink(urlFor('users'), 'Users')
         if isAuthenticated()
           .navbar-nav
             a.btn.btn-outline-light.mr-2(href=urlFor('logout')) Log Out

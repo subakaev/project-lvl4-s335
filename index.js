@@ -36,6 +36,7 @@ export default () => {
     ctx.state = {
       flash: ctx.flash,
       isAuthenticated: () => ctx.session.userId !== undefined,
+      currentUrl: ctx.url,
     };
     await next();
   });

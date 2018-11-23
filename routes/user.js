@@ -80,4 +80,37 @@ export default (router) => {
   router.get('changePassword', '/changePassword', async (ctx) => {
     ctx.render('users/changePassword', { form: {}, errors: {} });
   });
+
+  router.put('changePassword', '/changePassword', async (ctx) => {
+    const { form } = ctx.request.body;
+
+    const validatonResult = validateForm('changePassword', form);
+
+    if (validatonResult) {
+      ctx.render('users/changePassword', { form: {}, errors: validatonResult });
+      return;
+    }
+
+    if (form.password !== form.confirmPassword) {
+      ctx.render('users/changePassword', { form: {}, errors: createValidationError('confirmPassword', 'Passwords not match') });
+      return;
+    }
+
+    if (form.currentPassword === form.password) {
+      ctx.render('users/changePassword', { form: {}, errors: createValidationError('password', 'Password can be different') });
+      return;
+    }
+
+    const user = await User.findById(ctx.session.userId);
+
+    if (user.passwordDigest !== encrypt(form.currentPassword)) {
+      ctx.render('users/changePassword', { form: {}, errors: createValidationError('currentPassword', 'Incorrect password') });
+      return;
+    }
+
+    await user.update({ passwordDigest: encrypt(form.password) });
+
+    ctx.flash.set('Password has been changed');
+    ctx.redirect(router.url('root'));
+  });
 };

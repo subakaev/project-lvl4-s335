@@ -114,7 +114,7 @@ describe('User auth', () => {
       .post('/profile')
       .type('form')
       .set('Cookie', cookies)
-      .send({ _method: 'put', user: { firstName: '', lastName: '' }, errors: {} });
+      .send({ _method: 'put', form: { firstName: '', lastName: '' }, errors: {} });
 
     expect(res).toHaveHTTPStatus(200);
   });
@@ -129,7 +129,7 @@ describe('User auth', () => {
       .post('/profile')
       .type('form')
       .set('Cookie', cookies)
-      .send({ _method: 'put', user: expectedData, errors: {} });
+      .send({ _method: 'put', form: expectedData, errors: {} });
 
     expect(res).toHaveHTTPStatus(302);
 

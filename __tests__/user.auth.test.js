@@ -16,7 +16,7 @@ const getFakeUserFormData = () => {
   };
 };
 
-describe('User registration', () => {
+describe('User auth', () => {
   let server;
 
   beforeAll(() => {
@@ -30,57 +30,53 @@ describe('User registration', () => {
     return sequelize.sync({ force: true, logging: false });
   });
 
-  it('GET /register 200', async () => {
+  it('GET /logout 302', async () => {
     const res = await request.agent(server)
-      .get('/register');
-
-    expect(res).toHaveHTTPStatus(200);
-  });
-
-  it('POST /register 302 - correct registration', async () => {
-    const formData = getFakeUserFormData();
-
-    expect(await User.count()).toBe(0);
-
-    const res = await request.agent(server)
-      .post('/register')
-      .type('form')
-      .send({ form: formData, errors: {} });
+      .get('/logout');
 
     expect(res).toHaveHTTPStatus(302);
-
-    const users = await User.findAll();
-
-    expect(users.length).toBe(1);
-    expect(users[0].email).toBe(formData.email);
   });
 
-  it('POST /register 200 - not valid form data', async () => {
+  it('GET /login 200', async () => {
     const res = await request.agent(server)
-      .post('/register')
-      .type('form')
-      .send({ form: { email: '' }, errors: {} });
-
-    expect(await User.count()).toBe(0);
+      .get('/login');
 
     expect(res).toHaveHTTPStatus(200);
   });
 
-  it('POST /register 200 - user already exists', async () => {
-    const formData = getFakeUserFormData();
+  it('POST /login 302 - correct authentication', async () => {
+    const data = getFakeUserFormData();
 
-    const user = User.build(formData);
-
-    await user.save();
+    await User.bulkCreate([data]);
 
     const res = await request.agent(server)
-      .post('/register')
+      .post('/login')
       .type('form')
-      .send({ form: formData, errors: {} });
+      .send({ form: { userName: data.email, password: data.password }, errors: {} });
+
+    expect(res).toHaveHTTPStatus(302);
+  });
+
+  it('POST /login 200 - failed login because empty form', async () => {
+    const res = await request.agent(server)
+      .post('/login')
+      .type('form')
+      .send({ form: { userName: '', password: '' }, errors: {} });
 
     expect(res).toHaveHTTPStatus(200);
+  });
 
-    expect(await User.count()).toBe(1);
+  it('POST /login 200 - failed login because incorrect data', async () => {
+    const data = getFakeUserFormData();
+
+    await User.bulkCreate([data]);
+
+    const res = await request.agent(server)
+      .post('/login')
+      .type('form')
+      .send({ form: { userName: data.email, password: 'wrong' }, errors: {} });
+
+    expect(res).toHaveHTTPStatus(200);
   });
 
   afterEach((done) => {

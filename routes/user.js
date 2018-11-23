@@ -1,7 +1,9 @@
 import _ from 'lodash';
-import validator from 'validate.js';
 
 import { User } from '../models';
+import { encrypt } from '../lib/secure';
+import { createValidationError } from '../lib/helpers';
+import validateForm from '../lib/formValidators';
 
 export default (router) => {
   router.get('logout', '/logout', (ctx) => {
@@ -16,24 +18,7 @@ export default (router) => {
   router.post('login', '/login', async (ctx) => {
     const { form } = ctx.request.body;
 
-    const constraints = {
-      userName: {
-        presence: true,
-        length: {
-          minimum: 1,
-          tooShort: { message: 'User name cannot be empty' },
-        },
-      },
-      password: {
-        presence: true,
-        length: {
-          minimum: 1,
-          tooShort: { message: 'Password cannot be empty' },
-        },
-      },
-    };
-
-    const result = validator.validate(form, constraints);
+    const result = validateForm('login', form);
 
     if (result) {
       ctx.render('auth/login', { form, errors: result });
@@ -46,13 +31,15 @@ export default (router) => {
       },
     });
 
-    if (user && user.password === form.password) {
+    if (user && user.passwordDigest === encrypt(form.password)) {
       ctx.session.userId = user.id;
       ctx.redirect(router.url('root'));
       return;
     }
 
-    ctx.render('auth/login', { form: {}, errors: { summary: [{ message: 'User name or password is incorrect' }] } });
+    const data = { form, errors: createValidationError('summary', 'User name or password is incorrect') };
+
+    ctx.render('auth/login', data);
   });
 
   router.get('register', '/register', (ctx) => {
@@ -65,7 +52,8 @@ export default (router) => {
     const user = User.build(form);
 
     if (form.password !== form.confirmPassword) {
-      ctx.render('auth/register', { form, errors: { confirmPassword: [{ message: 'Passwords not match.' }] } });
+      const data = { form, errors: createValidationError('confirmPassword', 'Passwords not match.') };
+      ctx.render('auth/register', data);
       return;
     }
 
@@ -90,8 +78,6 @@ export default (router) => {
   });
 
   router.get('changePassword', '/changePassword', async (ctx) => {
-    const user = await User.findById(ctx.session.userId);
-
     ctx.render('users/changePassword', { form: {}, errors: {} });
   });
 };

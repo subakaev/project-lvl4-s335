@@ -7,18 +7,16 @@ block content
     form(action=urlFor('profile') method='post' novalidate)
       h1.h5.my-3.text-center.font-weight-normal Edit profile
       input(name='_method' type='hidden' value='put')
+      input(name='form.id' type='hidden' value=form.id)
+      input(name='form.email' type='hidden' value=form.email)
       .form-group
         label(for='inputId') User id
-        input(type='text' name='inputId' value=user.id id='inputId' class='form-control' disabled)
+        input(type='text' name='form.id' value=form.id id='inputId' class='form-control' disabled)
       .form-group
         label(for='inputEmail') Email
-        input(type='email' name='inputEmail' value=user.email id='inputEmail' class='form-control' disabled)
-      .form-group
-        label(for='inputFirstName') First name
-        input(type='text' name='user.firstName' value=user.firstName id='inputFirstName' class='form-control')
-      .form-group
-        label(for='inputLastName') Last name
-        input(type='text' name='user.lastName' value=user.lastName id='inputLastName' class='form-control')
+        input(type='email' name='form.email' value=form.email id='inputEmail' class='form-control' disabled)
+      +createInputGroup("firstName", 'text', 'First name', form, errors)
+      +createInputGroup("lastName", 'text', 'Last name', form, errors)
       .form-group
         button(class='btn btn-primary btn-block' type='submit') Update profile
         button.btn.btn-danger.btn-block(type='button' data-toggle='modal' data-target='#deleteUser') Delete account

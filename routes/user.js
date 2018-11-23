@@ -85,25 +85,32 @@ export default (router) => {
 
     const user = await User.findById(ctx.session.userId);
 
-    ctx.render('users/profile', { user });
+    const form = {
+      id: user.id,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+    };
+
+    ctx.render('users/profile', { form, errors: {} });
   });
 
   router.put('profile', '/profile', async (ctx) => {
-    const { user } = ctx.request.body;
+    const { form } = ctx.request.body;
 
-    const validationResult = validateForm('updateProfile', user);
+    const validationResult = validateForm('updateProfile', form);
 
     const current = await User.findById(ctx.session.userId);
 
     if (validationResult) {
-      ctx.render('users/profile', { user: { ...current, ...user }, errors: validationResult });
+      ctx.render('users/profile', { form, errors: validationResult });
       return;
     }
 
-    await current.update(user);
+    await current.update(form);
 
     ctx.flash.set('User profile has been changed');
-    ctx.redirect(router.url('login'));
+    ctx.redirect(router.url('root'));
   });
 
   router.get('changePassword', '/changePassword', async (ctx) => {
@@ -111,7 +118,6 @@ export default (router) => {
       ctx.redirect(router.url('login'));
       return;
     }
-
     ctx.render('users/changePassword', { form: {}, errors: {} });
   });
 

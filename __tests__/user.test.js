@@ -96,7 +96,7 @@ describe('User auth', () => {
       .set('Cookie', cookies)
       .send({ _method: 'put', form: { currentPassword: user.password, password: 'a', confirmPassword: 'a' }, errors: {} });
 
-    expect(res).toHaveHTTPStatus(200);
+    expect(res).toHaveHTTPStatus(302);
   });
 
   afterEach((done) => {

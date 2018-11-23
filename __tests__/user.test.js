@@ -108,6 +108,40 @@ describe('User auth', () => {
     expect(res).toHaveHTTPStatus(302);
   });
 
+  it('PUT /profile 200 - not valid form', async () => {
+    const res = await request.agent(server)
+      .post('/profile')
+      .type('form')
+      .set('Cookie', cookies)
+      .send({ _method: 'put', user: { firstName: '', lastName: '' }, errors: {} });
+
+    expect(res).toHaveHTTPStatus(200);
+  });
+
+  it('PUT /profile 302 - success', async () => {
+    const expectedData = {
+      firstName: 'changed first',
+      lastName: 'changed last',
+    };
+
+    const res = await request.agent(server)
+      .post('/profile')
+      .type('form')
+      .set('Cookie', cookies)
+      .send({ _method: 'put', user: expectedData, errors: {} });
+
+    expect(res).toHaveHTTPStatus(302);
+
+    const changed = await User.findOne({
+      where: {
+        email: user.email,
+      },
+    });
+
+    expect(changed.firstName).toBe(expectedData.firstName);
+    expect(changed.lastName).toBe(expectedData.lastName);
+  });
+
   afterEach((done) => {
     server.close();
     done();

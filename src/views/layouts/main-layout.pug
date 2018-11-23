@@ -24,7 +24,7 @@ html(lang="en")
         if isAuthenticated()
           .navbar-nav
             .btn-group
-              button.btn.btn-outline-info.dropdown-toggle(type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false') User email
+              button.btn.btn-outline-info.dropdown-toggle(type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')= userName
               .dropdown-menu.dropdown-menu-right
                 a.dropdown-item(href=urlFor('profile')) Profile
                 a.dropdown-item(href=urlFor('changePassword')) Change password

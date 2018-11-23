@@ -33,6 +33,7 @@ export default (router) => {
 
     if (user && user.passwordDigest === encrypt(form.password)) {
       ctx.session.userId = user.id;
+      ctx.session.userName = user.email;
       ctx.redirect(router.url('root'));
       return;
     }

@@ -29,6 +29,7 @@ const createSession = async (server, user) => {
 
 describe('User auth', () => {
   let server;
+  let user;
   let cookies;
 
   beforeAll(() => {
@@ -40,7 +41,7 @@ describe('User auth', () => {
   beforeEach(async () => {
     server = app().listen();
     await sequelize.sync({ force: true, logging: false });
-    const user = getFakeUserFormData();
+    user = getFakeUserFormData();
     await User.bulkCreate([user]);
     cookies = await createSession(server, user);
   });
@@ -69,7 +70,33 @@ describe('User auth', () => {
   });
 
   it('PUT /changePassword 200 - failed: not correct current password', async () => {
+    const res = await request.agent(server)
+      .post('/changePassword')
+      .type('form')
+      .set('Cookie', cookies)
+      .send({ _method: 'put', form: { currentPassword: 'wrong', password: 'a', confirmPassword: 'a' }, errors: {} });
 
+    expect(res).toHaveHTTPStatus(200);
+  });
+
+  it('PUT /changePassword 200 - failed: not valid form', async () => {
+    const res = await request.agent(server)
+      .post('/changePassword')
+      .type('form')
+      .set('Cookie', cookies)
+      .send({ _method: 'put', form: { currentPassword: '', password: '', confirmPassword: '' }, errors: {} });
+
+    expect(res).toHaveHTTPStatus(200);
+  });
+
+  it('PUT /changePassword 302 - success', async () => {
+    const res = await request.agent(server)
+      .post('/changePassword')
+      .type('form')
+      .set('Cookie', cookies)
+      .send({ _method: 'put', form: { currentPassword: user.password, password: 'a', confirmPassword: 'a' }, errors: {} });
+
+    expect(res).toHaveHTTPStatus(200);
   });
 
   afterEach((done) => {

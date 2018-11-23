@@ -48,7 +48,8 @@ describe('User auth', () => {
 
   it('GET /users 200', async () => {
     const res = await request.agent(server)
-      .get('/users');
+      .get('/users')
+      .set('Cookie', cookies);
 
     expect(res).toHaveHTTPStatus(200);
   });

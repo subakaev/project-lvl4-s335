@@ -68,11 +68,21 @@ export default (router) => {
   });
 
   router.get('users', '/users', async (ctx) => {
+    if (!ctx.state.isAuthenticated()) {
+      ctx.redirect(router.url('login'));
+      return;
+    }
+
     const users = await User.findAll();
     ctx.render('users/index', { users });
   });
 
   router.get('profile', '/profile', async (ctx) => {
+    if (!ctx.state.isAuthenticated()) {
+      ctx.redirect(router.url('login'));
+      return;
+    }
+
     const user = await User.findById(ctx.session.userId);
 
     ctx.render('users/profile', { user });
@@ -97,6 +107,11 @@ export default (router) => {
   });
 
   router.get('changePassword', '/changePassword', async (ctx) => {
+    if (!ctx.state.isAuthenticated()) {
+      ctx.redirect(router.url('login'));
+      return;
+    }
+
     ctx.render('users/changePassword', { form: {}, errors: {} });
   });
 

@@ -114,4 +114,14 @@ export default (router) => {
     ctx.flash.set('Password has been changed');
     ctx.redirect(router.url('root'));
   });
+
+  router.delete('deleteUser', '/deleteUser', async (ctx) => {
+    const user = await User.findById(ctx.session.userId);
+
+    await user.destroy();
+
+    ctx.session.userId = undefined;
+    ctx.flash.set('User has been deleted');
+    ctx.redirect(router.url('root'));
+  });
 };

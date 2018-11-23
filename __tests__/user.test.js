@@ -99,6 +99,15 @@ describe('User auth', () => {
     expect(res).toHaveHTTPStatus(302);
   });
 
+  it('DELETE /deleteUser 302 - success', async () => {
+    const res = await request.agent(server)
+      .post('/deleteUser')
+      .set('Cookie', cookies)
+      .send({ _method: 'delete' });
+
+    expect(res).toHaveHTTPStatus(302);
+  });
+
   afterEach((done) => {
     server.close();
     done();

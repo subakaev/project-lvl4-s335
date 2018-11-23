@@ -14,28 +14,28 @@ describe('requests', () => {
     server = app().listen();
   });
 
-  it('GET /profile 302 if unauthorized', async () => {
+  it('GET /profile 302 if not authenticated', async () => {
     const res = await request.agent(server)
       .get('/profile');
 
     expect(res).toHaveHTTPStatus(302);
   });
 
-  it('GET /changePassword 302 if unauthorized', async () => {
+  it('GET /changePassword 302 if not authenticated', async () => {
     const res = await request.agent(server)
       .get('/changePassword');
 
     expect(res).toHaveHTTPStatus(302);
   });
 
-  it('GET /users 302 if unauthorized', async () => {
+  it('GET /users 302 if not authenticated', async () => {
     const res = await request.agent(server)
       .get('/users');
 
     expect(res).toHaveHTTPStatus(302);
   });
 
-  it('GET /tasks 302 if unauthorized', async () => {
+  it('GET /tasks 302 if not authenticated', async () => {
     const res = await request.agent(server)
       .get('/tasks');
 

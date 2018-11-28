@@ -34,10 +34,10 @@ export default () => {
   app.use(session(app));
   app.use(flash());
   app.use(async (ctx, next) => {
+    const user = ctx.session.isNew ? { isAuthenticated: false } : ctx.session.user;
     ctx.state = {
       flash: ctx.flash,
-      isAuthenticated: () => ctx.session.userId !== undefined,
-      userName: ctx.session.userName,
+      user,
       currentUrl: ctx.url,
     };
     await next();

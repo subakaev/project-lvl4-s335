@@ -1,6 +1,6 @@
 export default (router) => {
   router.get('tasks', '/tasks', (ctx) => {
-    if (!ctx.state.isAuthenticated()) {
+    if (!ctx.state.user.isAuthenticated) {
       ctx.redirect(router.url('login'));
       return;
     }

@@ -16,14 +16,14 @@ describe('requests', () => {
 
   it('GET /profile 302 if not authenticated', async () => {
     const res = await request.agent(server)
-      .get('/profile');
+      .get('/users/1/edit');
 
     expect(res).toHaveHTTPStatus(302);
   });
 
   it('GET /changePassword 302 if not authenticated', async () => {
     const res = await request.agent(server)
-      .get('/changePassword');
+      .get('/users/1/password');
 
     expect(res).toHaveHTTPStatus(302);
   });

@@ -26,8 +26,8 @@ html(lang="en")
             .btn-group
               button.btn.btn-outline-info.dropdown-toggle(type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')= user.name
               .dropdown-menu.dropdown-menu-right
-                a.dropdown-item(href=urlFor('profile')) Profile
-                a.dropdown-item(href=urlFor('changePassword')) Change password
+                a.dropdown-item(href=urlFor('profile', user.id)) Profile
+                a.dropdown-item(href=urlFor('changePassword', user.id)) Change password
                 .dropdown-divider
                 a.dropdown-item(href=urlFor('logout')) Logout
         else

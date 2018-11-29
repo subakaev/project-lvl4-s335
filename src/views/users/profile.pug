@@ -4,7 +4,7 @@ include /mixins/forms.pug
 
 block content
   .row.mt-3.justify-content-center
-    form(action=urlFor('profile') method='post' novalidate)
+    form(action=urlFor('updateProfile', user.id) method='post' novalidate)
       h1.h5.my-3.text-center.font-weight-normal Edit profile
       input(name='_method' type='hidden' value='put')
       input(name='form.id' type='hidden' value=form.id)
@@ -30,7 +30,7 @@ block content
             span(aria-hidden='true') &times;
         .modal-body Delete account? The operation is permanent.
         .modal-footer
-          form.form-inline(action=urlFor('deleteUser') method='post')
+          form.form-inline(action=urlFor('deleteUser', user.id) method='post')
             input(name='_method' type='hidden' value='delete')
             button.btn.btn-outline-secondary.mr-3(data-dismiss='modal' type='button') Cancel
             button.btn.btn-danger(type='submit') Delete

@@ -72,7 +72,7 @@ export default (router) => {
 
   router.get('users', '/users', async (ctx) => {
     if (!ctx.state.user.isAuthenticated) {
-      ctx.redirect(router.url('login'));
+      ctx.redirect(router.url('session/new'));
       return;
     }
 
@@ -80,9 +80,9 @@ export default (router) => {
     ctx.render('users/index', { users });
   });
 
-  router.get('profile', '/profile', async (ctx) => {
+  router.get('profile', '/users/:id/edit', async (ctx) => {
     if (!ctx.state.user.isAuthenticated) {
-      ctx.redirect(router.url('login'));
+      ctx.redirect(router.url('session/new'));
       return;
     }
 
@@ -98,7 +98,7 @@ export default (router) => {
     ctx.render('users/profile', { form, errors: {} });
   });
 
-  router.put('profile', '/profile', async (ctx) => {
+  router.put('updateProfile', '/users/:id', async (ctx) => {
     const { form } = ctx.request.body;
 
     const validationResult = validateForm('updateProfile', form);
@@ -116,15 +116,15 @@ export default (router) => {
     ctx.redirect(router.url('root'));
   });
 
-  router.get('changePassword', '/changePassword', async (ctx) => {
+  router.get('changePassword', '/users/:id/password', async (ctx) => {
     if (!ctx.state.user.isAuthenticated) {
-      ctx.redirect(router.url('login'));
+      ctx.redirect(router.url('/session/new'));
       return;
     }
     ctx.render('users/changePassword', { form: {}, errors: {} });
   });
 
-  router.put('changePassword', '/changePassword', async (ctx) => {
+  router.put('changePassword', '/users/:id/password', async (ctx) => {
     const { form } = ctx.request.body;
 
     const validatonResult = validateForm('changePassword', form);
@@ -157,7 +157,7 @@ export default (router) => {
     ctx.redirect(router.url('root'));
   });
 
-  router.delete('deleteUser', '/deleteUser', async (ctx) => {
+  router.delete('deleteUser', '/users/:id', async (ctx) => {
     const user = await User.findById(ctx.session.user.id);
 
     await user.destroy();

@@ -32,8 +32,8 @@ html(lang="en")
                 a.dropdown-item(href=urlFor('logout')) Logout
         else
           .navbar-nav
-            a.btn.btn-outline-light.mr-2(href=urlFor('login')) Log In
-            a.btn.btn-primary(href=urlFor('register')) Sign Up
+            a.btn.btn-outline-light.mr-2(href=urlFor('newSession')) Log In
+            a.btn.btn-primary(href=urlFor('newUser')) Sign Up
     .container
       - const msg = flash.get()
       if msg

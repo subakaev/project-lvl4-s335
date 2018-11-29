@@ -37,42 +37,42 @@ describe('User auth', () => {
     expect(res).toHaveHTTPStatus(302);
   });
 
-  it('GET /login 200', async () => {
+  it('GET /session/new 200', async () => {
     const res = await request.agent(server)
-      .get('/login');
+      .get('/session/new');
 
     expect(res).toHaveHTTPStatus(200);
   });
 
-  it('POST /login 302 - correct authentication', async () => {
+  it('POST /session 302 - correct authentication', async () => {
     const data = getFakeUserFormData();
 
     await User.bulkCreate([data]);
 
     const res = await request.agent(server)
-      .post('/login')
+      .post('/session')
       .type('form')
       .send({ form: { userName: data.email, password: data.password }, errors: {} });
 
     expect(res).toHaveHTTPStatus(302);
   });
 
-  it('POST /login 200 - failed login because empty form', async () => {
+  it('POST /session 200 - failed login because empty form', async () => {
     const res = await request.agent(server)
-      .post('/login')
+      .post('/session')
       .type('form')
       .send({ form: { userName: '', password: '' }, errors: {} });
 
     expect(res).toHaveHTTPStatus(200);
   });
 
-  it('POST /login 200 - failed login because incorrect data', async () => {
+  it('POST /session 200 - failed login because incorrect data', async () => {
     const data = getFakeUserFormData();
 
     await User.bulkCreate([data]);
 
     const res = await request.agent(server)
-      .post('/login')
+      .post('/session')
       .type('form')
       .send({ form: { userName: data.email, password: 'wrong' }, errors: {} });
 

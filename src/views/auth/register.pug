@@ -3,7 +3,7 @@ extends /layouts/auth-layout.pug
 include /mixins/forms.pug
 
 block content
-  form(action=urlFor('register') method='post' novalidate)
+  form(action=urlFor('users') method='post' novalidate)
     h1(class='h5 my-3 text-center font-weight-normal') Sign Up
     +createInputGroup('email', 'email', 'Email address', form, errors)
     +createInputGroup('firstName', 'text', 'First name', form, errors)

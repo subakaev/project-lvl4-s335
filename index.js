@@ -58,8 +58,8 @@ export default () => {
   addRoutes(router);
 
   app
-    .use(router.routes())
-    .use(router.allowedMethods());
+    .use(router.allowedMethods())
+    .use(router.routes());
 
   const pug = new Pug({
     viewPath: path.join(__dirname, '/src/views'),

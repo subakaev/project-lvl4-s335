@@ -30,20 +30,20 @@ describe('User registration', () => {
     return sequelize.sync({ force: true, logging: false });
   });
 
-  it('GET /register 200', async () => {
+  it('GET /users/new 200', async () => {
     const res = await request.agent(server)
-      .get('/register');
+      .get('/users/new');
 
     expect(res).toHaveHTTPStatus(200);
   });
 
-  it('POST /register 302 - correct registration', async () => {
+  it('POST /users 302 - correct registration', async () => {
     const formData = getFakeUserFormData();
 
     expect(await User.count()).toBe(0);
 
     const res = await request.agent(server)
-      .post('/register')
+      .post('/users')
       .type('form')
       .send({ form: formData, errors: {} });
 
@@ -55,9 +55,9 @@ describe('User registration', () => {
     expect(users[0].email).toBe(formData.email);
   });
 
-  it('POST /register 200 - not valid form data', async () => {
+  it('POST /users 200 - not valid form data', async () => {
     const res = await request.agent(server)
-      .post('/register')
+      .post('/users')
       .type('form')
       .send({ form: { email: '' }, errors: {} });
 
@@ -66,7 +66,7 @@ describe('User registration', () => {
     expect(res).toHaveHTTPStatus(200);
   });
 
-  it('POST /register 200 - user already exists', async () => {
+  it('POST /users 200 - user already exists', async () => {
     const formData = getFakeUserFormData();
 
     const user = User.build(formData);
@@ -74,7 +74,7 @@ describe('User registration', () => {
     await user.save();
 
     const res = await request.agent(server)
-      .post('/register')
+      .post('/users')
       .type('form')
       .send({ form: formData, errors: {} });
 

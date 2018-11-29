@@ -6,16 +6,11 @@ import { createValidationError } from '../lib/helpers';
 import validateForm from '../lib/formValidators';
 
 export default (router) => {
-  router.get('logout', '/logout', (ctx) => {
-    ctx.session.user = { isAuthenticated: false };
-    ctx.redirect(router.url('login'));
-  });
-
-  router.get('login', '/login', (ctx) => {
+  router.get('newSession', '/session/new', (ctx) => {
     ctx.render('auth/login', { form: {}, errors: {} });
   });
 
-  router.post('login', '/login', async (ctx) => {
+  router.post('session', '/session', async (ctx) => {
     const { form } = ctx.request.body;
 
     const result = validateForm('login', form);
@@ -46,11 +41,16 @@ export default (router) => {
     ctx.render('auth/login', data);
   });
 
-  router.get('register', '/register', (ctx) => {
+  router.get('logout', '/logout', (ctx) => {
+    ctx.session.user = { isAuthenticated: false };
+    ctx.redirect(router.url('root'));
+  });
+
+  router.get('newUser', '/users/new', (ctx) => {
     ctx.render('auth/register', { form: {}, errors: {} });
   });
 
-  router.post('register', '/register', async (ctx) => {
+  router.post('users', '/users', async (ctx) => {
     const { form } = ctx.request.body;
 
     const user = User.build(form);

@@ -18,7 +18,7 @@ const getFakeUserFormData = () => {
 
 const createSession = async (server, user) => {
   const res = await request.agent(server)
-    .post('/login')
+    .post('/session')
     .type('form')
     .send({ form: { userName: user.email, password: user.password }, errors: {} });
 

@@ -32,7 +32,8 @@ describe('User auth', () => {
 
   it('GET /logout 302', async () => {
     const res = await request.agent(server)
-      .get('/logout');
+      .post('/session')
+      .send({ _method: 'delete' });
 
     expect(res).toHaveHTTPStatus(302);
   });

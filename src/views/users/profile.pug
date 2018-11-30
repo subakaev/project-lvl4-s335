@@ -30,7 +30,5 @@ block content
             span(aria-hidden='true') &times;
         .modal-body Delete account? The operation is permanent.
         .modal-footer
-          form.form-inline(action=urlFor('deleteUser', user.id) method='post')
-            input(name='_method' type='hidden' value='delete')
-            button.btn.btn-outline-secondary.mr-3(data-dismiss='modal' type='button') Cancel
-            button.btn.btn-danger(type='submit') Delete
+          a.btn.btn-outline-secondary.mr-3(data-dismiss='modal') Cancel
+          a.btn.btn-danger.mr-3(href=urlFor('deleteUser', user.id) data-method='delete' rel='nofollow') Delete

@@ -8,8 +8,8 @@ html(lang="en")
   head
     title Simple Task Manager
     link(rel='icon' type='image/png' href='/assets/img/logo_03.png')
-    script(src='/assets/main.js')
     script(src='/assets/bundle.js')
+    script(src='/assets/main.js')
   body
     nav.navbar.navbar-expand-sm.navbar-dark.bg-dark
       a.navbar-brand(href=urlFor('root'))
@@ -29,7 +29,7 @@ html(lang="en")
                 a.dropdown-item(href=urlFor('profile', user.id)) Profile
                 a.dropdown-item(href=urlFor('changePassword', user.id)) Change password
                 .dropdown-divider
-                a.dropdown-item(href=urlFor('logout')) Logout
+                a.dropdown-item(href=urlFor('session') data-method='delete' rel='nofollow') Logout
         else
           .navbar-nav
             a.btn.btn-outline-light.mr-2(href=urlFor('newSession')) Log In

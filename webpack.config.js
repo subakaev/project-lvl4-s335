@@ -8,12 +8,10 @@ module.exports = {
   mode: process.env.NODE_ENV || 'development',
   entry: {
     main: ['./src'],
-    bundle: ['jquery', 'popper.js', 'bootstrap'],
+    bundle: ['jquery', 'jquery-ujs', 'popper.js', 'bootstrap'],
   },
   output: {
     path: path.join(__dirname, 'dist', 'assets'),
-    // filename: 'application.js',
-    // publicPath: '/assets/'
   },
   module: {
     rules: [

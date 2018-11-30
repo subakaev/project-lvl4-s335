@@ -41,7 +41,7 @@ export default (router) => {
     ctx.render('auth/login', data);
   });
 
-  router.get('logout', '/logout', (ctx) => {
+  router.delete('session', '/session', (ctx) => {
     ctx.session.user = { isAuthenticated: false };
     ctx.redirect(router.url('root'));
   });

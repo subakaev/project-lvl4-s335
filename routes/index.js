@@ -1,6 +1,6 @@
 import home from './home';
-import user from './user';
-import task from './task';
+import user from './users';
+import task from './tasks';
 import tags from './tags';
 
 const routes = [home, user, task, tags];

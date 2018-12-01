@@ -35,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
     },
   }, {});
   Task.associate = (models) => {
-    Task.belongsToMany(models.Tag, { through: 'TagTask' });
+    Task.belongsToMany(models.Tag, { through: 'TaskTags' });
   };
   return Task;
 };

@@ -7,10 +7,10 @@ const getStatus = (id, name) => ({
 
 module.exports = {
   up: queryInterface => queryInterface.bulkInsert('TaskStatuses', [
-    getStatus(1, 'Новый'),
-    getStatus(2, 'В работе'),
-    getStatus(3, 'На тестировании'),
-    getStatus(4, 'Завершен'),
+    getStatus(1, 'New'),
+    getStatus(2, 'In Progress'),
+    getStatus(3, 'Test'),
+    getStatus(4, 'Done'),
   ], {}),
 
   down: queryInterface => queryInterface.bulkDelete('TaskStatuses', null, {}),

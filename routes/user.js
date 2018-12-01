@@ -5,6 +5,8 @@ import { encrypt } from '../lib/secure';
 import { createValidationError } from '../lib/helpers';
 import validateForm from '../lib/formValidators';
 
+import ensureAuth from '../middlewares/ensureAuthMiddleware';
+
 export default (router) => {
   router.get('newSession', '/session/new', (ctx) => {
     ctx.render('auth/login', { form: {}, errors: {} });
@@ -70,22 +72,12 @@ export default (router) => {
     }
   });
 
-  router.get('users', '/users', async (ctx) => {
-    if (!ctx.state.user.isAuthenticated) {
-      ctx.redirect(router.url('session/new'));
-      return;
-    }
-
+  router.get('users', '/users', ensureAuth, async (ctx) => {
     const users = await User.findAll();
     ctx.render('users/index', { users });
   });
 
-  router.get('profile', '/users/:id/edit', async (ctx) => {
-    if (!ctx.state.user.isAuthenticated) {
-      ctx.redirect(router.url('session/new'));
-      return;
-    }
-
+  router.get('profile', '/users/:id/edit', ensureAuth, async (ctx) => {
     const user = await User.findById(ctx.session.user.id);
 
     const form = {
@@ -98,7 +90,7 @@ export default (router) => {
     ctx.render('users/profile', { form, errors: {} });
   });
 
-  router.put('updateProfile', '/users/:id', async (ctx) => {
+  router.put('updateProfile', '/users/:id', ensureAuth, async (ctx) => {
     const { form } = ctx.request.body;
 
     const validationResult = validateForm('updateProfile', form);
@@ -116,15 +108,11 @@ export default (router) => {
     ctx.redirect(router.url('root'));
   });
 
-  router.get('changePassword', '/users/:id/password', async (ctx) => {
-    if (!ctx.state.user.isAuthenticated) {
-      ctx.redirect(router.url('/session/new'));
-      return;
-    }
+  router.get('changePassword', '/users/:id/password', ensureAuth, async (ctx) => {
     ctx.render('users/changePassword', { form: {}, errors: {} });
   });
 
-  router.put('changePassword', '/users/:id/password', async (ctx) => {
+  router.put('changePassword', '/users/:id/password', ensureAuth, async (ctx) => {
     const { form } = ctx.request.body;
 
     const validatonResult = validateForm('changePassword', form);
@@ -157,7 +145,7 @@ export default (router) => {
     ctx.redirect(router.url('root'));
   });
 
-  router.delete('deleteUser', '/users/:id', async (ctx) => {
+  router.delete('deleteUser', '/users/:id', ensureAuth, async (ctx) => {
     const user = await User.findById(ctx.session.user.id);
 
     await user.destroy();

@@ -1,21 +1,23 @@
+import ensureAuth from '../middlewares/ensureAuthMiddleware';
+
 export default (router) => {
-  router.get('tags', '/tags', (ctx) => {
+  router.get('tags', '/tags', ensureAuth, (ctx) => {
     ctx.body = 'not implemented';
   });
 
-  router.get('newTag', '/tags/new', (ctx) => {
+  router.get('newTag', '/tags/new', ensureAuth, (ctx) => {
     ctx.body = 'not implemented';
   });
 
-  router.post('tags', '/tags', (ctx) => {
+  router.post('tags', '/tags', ensureAuth, (ctx) => {
     ctx.body = 'not implemented';
   });
 
-  router.put('tags', '/tags', (ctx) => {
+  router.put('tags', '/tags', ensureAuth, (ctx) => {
     ctx.body = 'not implemented';
   });
 
-  router.delete('tags', '/tags', (ctx) => {
+  router.delete('tags', '/tags', ensureAuth, (ctx) => {
     ctx.body = 'not implemented';
   });
 };

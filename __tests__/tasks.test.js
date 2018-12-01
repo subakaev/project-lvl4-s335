@@ -3,7 +3,9 @@ import matchers from 'jest-supertest-matchers';
 import faker from 'faker';
 
 import app from '..';
-import { User, Task, TaskStatus, sequelize } from '../models';
+import {
+  User, Task, TaskStatus, sequelize,
+} from '../models';
 
 const getFakeUserFormData = () => {
   const password = faker.internet.password();
@@ -85,20 +87,6 @@ describe('Tasks CRUD', () => {
       .set('Cookie', cookies)
       .type('form')
       .send({ form: { name: '' }, errors: {} });
-
-    expect(res).toHaveHTTPStatus(200);
-  });
-
-  it('POST /tasks 200 - failed task creation if name is already exists', async () => {
-    const data = { name: 'task1', statusId: 1, creatorId: 1 };
-
-    await Task.bulkCreate([data]);
-
-    const res = await request.agent(server)
-      .post('/tasks')
-      .set('Cookie', cookies)
-      .type('form')
-      .send({ form: { name: data.name }, errors: {} });
 
     expect(res).toHaveHTTPStatus(200);
   });

@@ -13,8 +13,8 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
   }, {});
-  // Tag.associate = function(models) {
-    // associations can be defined here
-  // };
+  Tag.associate = (models) => {
+    Tag.belongsToMany(models.Task, { through: 'TagTask' });
+  };
   return Tag;
 };

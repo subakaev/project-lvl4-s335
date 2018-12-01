@@ -10,8 +10,8 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
   }, {});
-  // TaskStatus.associate = function(models) {
-    // associations can be defined here
-  // };
+  TaskStatus.associate = (models) => {
+    TaskStatus.hasMany(models.Task, { foreignKey: 'statusId', as: 'Status' });
+  };
   return TaskStatus;
 };

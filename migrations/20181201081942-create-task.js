@@ -16,14 +16,32 @@ module.exports = {
     statusId: {
       allowNull: false,
       type: Sequelize.INTEGER,
+      references: {
+        model: 'TaskStatuses',
+        key: 'id',
+      },
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL',
     },
     creatorId: {
       allowNull: false,
       type: Sequelize.INTEGER,
+      references: {
+        model: 'Users',
+        key: 'id',
+      },
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE',
     },
     assignedToId: {
       allowNull: false,
       type: Sequelize.INTEGER,
+      references: {
+        model: 'Users',
+        key: 'id',
+      },
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL',
     },
     createdAt: {
       allowNull: false,

@@ -1,0 +1,15 @@
+extends /layouts/main-layout.pug
+
+include /mixins/forms.pug
+
+block content
+  form(action=urlFor('addTask') method='post' novalidate)
+    h1.h5.my-3.text-center.font-weight-normal New task
+    +createInputGroup('name', 'text', 'Tag name', form, errors)
+    .form-group
+      label(for=descriptionId) Description
+      textarea.form-control(name='form.description' value=form['description'] id=descriptionId)
+      if errors['description']
+        .invalid-feedback= errors['description'].map(({ message }) => message).join('. ')
+    .form-group
+      button(class='btn btn-lg btn-primary btn-block' type='submit') Create

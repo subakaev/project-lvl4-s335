@@ -2,3 +2,14 @@ extends /layouts/main-layout.pug
 
 block content
   a.btn.btn-primary(href=urlFor('tags')) Manage Tags
+  a.btn.btn-primary(href=urlFor('newTask')) Add Task
+
+  .row
+    each task in tasks
+      .card(style='width: 25%')
+        .card-body
+          h5.card-title=task.name
+          p.card-text=task.description
+        .card-footer
+          a.card-link(href=urlFor('editTask', task.id)) Edit
+          a.card-link.text-danger(href=urlFor('deleteTask', task.id) data-method='delete' rel='nofollow') Delete

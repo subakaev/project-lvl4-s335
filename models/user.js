@@ -56,7 +56,7 @@ export default (sequelize, DataTypes) => {
   }, {});
   User.associate = (models) => {
     User.hasMany(models.Task, { foreignKey: 'creatorId', as: 'Creator' });
-    User.hasMany(models.Task, { foreignKey: 'assignedToId', as: 'AssignedTo' });
+    User.hasMany(models.Task, { foreignKey: 'assignedToId', as: 'AssignedTo', onDelete: 'SET NULL' });
   };
   return User;
 };

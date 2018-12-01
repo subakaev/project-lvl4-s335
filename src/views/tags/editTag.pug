@@ -1,0 +1,11 @@
+extends /layouts/main-layout.pug
+
+include /mixins/forms.pug
+
+block content
+  form(action=urlFor('updateTag', form.id) method='post' novalidate)
+    h1.h5.my-3.text-center.font-weight-normal Edit tag
+    input(name='_method' type='hidden' value='put')
+    +createInputGroup('name', 'text', 'Tag name', form, errors)
+    .form-group
+      button(class='btn btn-lg btn-primary btn-block' type='submit') Update

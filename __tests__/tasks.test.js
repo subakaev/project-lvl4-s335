@@ -91,70 +91,51 @@ describe('Tasks CRUD', () => {
     expect(res).toHaveHTTPStatus(200);
   });
 
-  // it('GET /tags/:id/edit 200', async () => {
-  //   await Tag.bulkCreate([{ name: 'tag1' }]);
+  it('GET /tasks/:id/edit 200', async () => {
+    await Task.bulkCreate([{ name: 'task1', statusId: 1, creatorId: 1 }]);
 
-  //   const res = await request.agent(server)
-  //     .get('/tags/1/edit')
-  //     .set('Cookie', cookies);
+    const res = await request.agent(server)
+      .get('/tasks/1/edit')
+      .set('Cookie', cookies);
 
-  //   expect(res).toHaveHTTPStatus(200);
-  // });
+    expect(res).toHaveHTTPStatus(200);
+  });
 
-  // it('PUT /tags/:id 200 - failed tag update if name is empty', async () => {
-  //   const data = { name: 'tag1' };
+  it('PUT /tasks/:id 200 - failed task update if name is empty', async () => {
+    const data = { name: 'task1', statusId: 1, creatorId: 1 };
 
-  //   await Tag.bulkCreate([data]);
+    await Task.bulkCreate([data]);
 
-  //   const res = await request.agent(server)
-  //     .post('/tags/1')
-  //     .set('Cookie', cookies)
-  //     .type('form')
-  //     .send({ _method: 'put', form: { name: '' }, errors: {} });
+    const res = await request.agent(server)
+      .post('/tasks/1')
+      .set('Cookie', cookies)
+      .type('form')
+      .send({ _method: 'put', form: { name: '' }, errors: {} });
 
-  //   const tag = await Tag.findById(1);
+    const task = await Task.findById(1);
 
-  //   expect(res).toHaveHTTPStatus(200);
+    expect(res).toHaveHTTPStatus(200);
 
-  //   expect(tag.name).toEqual(data.name);
-  // });
+    expect(task.name).toEqual(data.name);
+  });
 
-  // it('PUT /tags/:id 200 - failed tag update if name is already exists', async () => {
-  //   const data = { name: 'tag1' };
+  it('PUT /tasks/:id 302 - successful update', async () => {
+    const data = { name: 'task1', statusId: 1, creatorId: 1 };
 
-  //   await Tag.bulkCreate([data]);
-  //   await Tag.bulkCreate([{ name: 'tag2' }]);
+    await Task.bulkCreate([data]);
 
-  //   const res = await request.agent(server)
-  //     .post('/tags/1')
-  //     .set('Cookie', cookies)
-  //     .type('form')
-  //     .send({ _method: 'put', form: { name: 'tag2' }, errors: {} });
+    const res = await request.agent(server)
+      .post('/tasks/1')
+      .set('Cookie', cookies)
+      .type('form')
+      .send({ _method: 'put', form: { name: 'task2' }, errors: {} });
 
-  //   const tag = await Tag.findById(1);
+    expect(res).toHaveHTTPStatus(302);
 
-  //   expect(res).toHaveHTTPStatus(200);
+    const task = await Task.findById(1);
 
-  //   expect(tag.name).toEqual(data.name);
-  // });
-
-  // it('PUT /tags/:id 302 - successful update', async () => {
-  //   const data = { name: 'tag1' };
-
-  //   await Tag.bulkCreate([data]);
-
-  //   const res = await request.agent(server)
-  //     .post('/tags/1')
-  //     .set('Cookie', cookies)
-  //     .type('form')
-  //     .send({ _method: 'put', form: { name: 'tag2' }, errors: {} });
-
-  //   expect(res).toHaveHTTPStatus(302);
-
-  //   const tag = await Tag.findById(1);
-
-  //   expect(tag.name).toEqual('tag2');
-  // });
+    expect(task.name).toEqual('task2');
+  });
 
   it('DELETE deleteTask 200 - should delete task', async () => {
     await Task.bulkCreate([{ name: 'tag1', statusId: 1, creatorId: 1 }]);

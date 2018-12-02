@@ -38,12 +38,27 @@ export default (router) => {
     }
   });
 
-  router.get('editTask', '/tasks/:id/edit', (ctx) => {
-    throw new Error('not implemented');
+  router.get('editTask', '/tasks/:id/edit', async (ctx) => {
+    const task = await Task.findById(ctx.params.id);
+
+    console.log(task);
+
+    ctx.render('tasks/editTask', { form: task, errors: {} });
   });
 
-  router.put('updateTask', '/tasks/:id', ensureAuth, (ctx) => {
-    throw new Error('not implemented');
+  router.put('updateTask', '/tasks/:id', ensureAuth, async (ctx) => {
+    const { form } = ctx.request.body;
+
+    const current = await Task.findById(ctx.params.id);
+
+    try {
+      await current.update(form);
+
+      ctx.flash.set('Task has been updated');
+      ctx.redirect(router.url('tasks'));
+    } catch (e) {
+      ctx.render('tasks/editTask', { form: { ...form, id: ctx.params.id }, errors: _.groupBy(e.errors, 'path') });
+    }
   });
 
   router.delete('deleteTask', '/tasks/:id', ensureAuth, async (ctx) => {

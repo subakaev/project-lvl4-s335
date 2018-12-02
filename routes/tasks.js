@@ -2,7 +2,9 @@ import _ from 'lodash';
 
 import ensureAuth from '../middlewares/ensureAuthMiddleware';
 
-import { Task, TaskStatus, User, Tag } from '../models';
+import {
+  Task, TaskStatus, User, Tag,
+} from '../models';
 
 export default (router) => {
   router.get('tasks', '/tasks', ensureAuth, async (ctx) => {
@@ -39,7 +41,6 @@ export default (router) => {
     const tags = await Tag.findAll();
 
     const addedTags = await Tag.findAll({ where: { id: form.tags } });
-    console.log(form);
 
     const task = Task.build({
       ...form,
@@ -50,13 +51,13 @@ export default (router) => {
     try {
       await task.save();
 
-      console.log('SET TAGS');
       await task.addTags(addedTags);
       ctx.flash.set(`Task "${task.name}" has been created`);
       ctx.redirect(router.url('tasks'));
     } catch (e) {
-      console.log(e);
-      ctx.render('tasks/newTask', { form, status, users, tags, errors: _.groupBy(e.errors, 'path') });
+      ctx.render('tasks/newTask', {
+        form, status, users, tags, errors: _.groupBy(e.errors, 'path'),
+      });
     }
   });
 

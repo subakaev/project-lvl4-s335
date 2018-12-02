@@ -76,7 +76,7 @@ describe('Tasks CRUD', () => {
       .post('/tasks')
       .set('Cookie', cookies)
       .type('form')
-      .send({ form: { name: 'task2' }, errors: {} });
+      .send({ form: { name: 'task2', statusId: 1 }, errors: {} });
 
     expect(res).toHaveHTTPStatus(302);
   });

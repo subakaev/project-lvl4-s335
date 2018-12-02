@@ -1,22 +1,27 @@
 extends /layouts/main-layout.pug
 
 block content
-  .my-3.text-center 
-    h3 List of users
-  a.btn.btn-success(href=urlFor('newTag')) New Tag
-  table.table.table-striped.table-sm
-    thead.thead-light
-      tr
-        th #
-        th Id
-        th Name
-        th 
-    tbody
-      each tag, index in tags
-        tr
-          td= index+1
-          td= tag.id
-          td= tag.name
-          td
-            a.btn.btn-outline-primary.btn-sm(href=urlFor('editTag', tag.id)) Edit
-            a.btn.btn-danger.btn-sm.ml-2(href=urlFor('deleteTag', tag.id) data-method='delete' rel='nofollow') Delete
+  .row.justify-content-md-center
+    .col-md-5.my-3.text-center
+      h5 List of tags
+  .row.justify-content-md-center
+    .col-md-5.mb-3.text-right
+      a.btn.btn-success.btn-sm(href=urlFor('newTag')) New Tag
+  .row.justify-content-md-center
+    .col-md-5
+      table.table.table-striped.table-sm
+        thead.thead-light
+          tr
+            th #
+            th Id
+            th Name
+            th 
+        tbody
+          each tag, index in tags
+            tr
+              td= index+1
+              td= tag.id
+              td= tag.name
+              td
+                a.btn.btn-primary.btn-sm(href=urlFor('editTag', tag.id)) Edit
+                a.btn.btn-danger.btn-sm.ml-2(href=urlFor('deleteTag', tag.id) data-method='delete' rel='nofollow') Delete

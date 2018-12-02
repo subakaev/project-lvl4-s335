@@ -11,11 +11,30 @@ block content
   .row.justify-content-md-center
     each task in tasks
       .card.m-1(style='width: 30%;')
-        .card-header.px-2.py-1
+        .card-header.px-2.py-1.text-truncate
           =task.name
-        .card-body
-          p.card-text=task.description
-        .card-footer
+        .card-body.py-1
+          p.m-0
+            if task.description
+              =task.description
+            else
+              span.font-italic.text-muted no description
+          hr.my-1
+          p.m-0
+            span(style='font-size: .75rem') Creator: 
+            span.badge.badge-secondary=task.Creator.email
+          p.m-0
+            span(style='font-size: .75rem') Assigned to: 
+            if (task.AssignedTo)
+              span.badge.badge-success=task.AssignedTo.email
+            else
+              span.font-italic.text-muted(style='font-size: .75rem') not assigned
+          .flex
+            .justify-content-end 
+              span(style='font-size: .75rem') Tags:
+              each tag in task.Tags
+                span.badge.badge-primary.mx-1=tag.name
+        .card-footer.px-2.py-1
           a.card-link(href=urlFor('editTask', task.id)) Edit
           a.card-link.text-danger(href=urlFor('deleteTask', task.id) data-method='delete' rel='nofollow') Delete
 

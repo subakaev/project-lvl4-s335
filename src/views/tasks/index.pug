@@ -1,8 +1,44 @@
 extends /layouts/main-layout.pug
 
 block content
-  a.btn.btn-primary(href=urlFor('tags')) Manage Tags
-  a.btn.btn-primary(href=urlFor('newTask')) Add Task
+  .row
+    form.form-inline(action='' method='post' novalidate)
+      .form-check
+        input.form-check-input(type='checkbox' id='showMyTasksCheckBox')
+        label.form-check-label(for='showMyTasksCheckBox') Show my tasks
+      .form-group(style='maxHeight: 100px; overflow-y: auto')
+        label(for='selectTagsControl') Tags
+        select.form-control(id='selectTagsControl' multiple)
+          option 1
+          option 2
+          option 3
+          option 4
+          option 5
+      .form-group
+        label(for='selectStatusControl') Status
+        select.form-control(id='selectStatusControl')
+          option 1
+          option 2
+          option 3
+          option 4
+          option 5
+      .form-group
+        label(for='selectAssignedToControl') Status
+        select.form-control(id='selectAssignedToControl')
+          option 1
+          option 2
+          option 3
+          option 4
+          option 5
+      .form-group
+        a.btn.btn-outline-secondary(href='#') Reset
+        button.btn.btn-primary(type='submit') Apply
+
+
+
+  .row
+    a.btn.btn-primary(href=urlFor('tags')) Manage Tags
+    a.btn.btn-primary(href=urlFor('newTask')) Add Task
 
   .row
     each task in tasks

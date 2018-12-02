@@ -8,7 +8,7 @@ import {
 
 export default (router) => {
   router.get('tasks', '/tasks', ensureAuth, async (ctx) => {
-    const tasks = await Task.findAll();
+    const tasks = await Task.findAll({ include: [{ all: true, nested: true }] });
 
     ctx.render('tasks/index', { tasks });
   });

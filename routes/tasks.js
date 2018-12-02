@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 import ensureAuth from '../middlewares/ensureAuthMiddleware';
 
-import { Task, TaskStatus } from '../models';
+import { Task, TaskStatus, User, Tag } from '../models';
 
 export default (router) => {
   router.get('tasks', '/tasks', ensureAuth, async (ctx) => {
@@ -11,12 +11,31 @@ export default (router) => {
     ctx.render('tasks/index', { tasks });
   });
 
-  router.get('newTask', '/tasks/new', ensureAuth, (ctx) => {
-    ctx.render('tasks/newTask', { form: {}, errors: {} });
+  router.get('newTask', '/tasks/new', ensureAuth, async (ctx) => {
+    const status = await TaskStatus.findOne({ where: { name: 'New' } });
+
+    const users = await User.findAll();
+
+    const tags = await Tag.findAll();
+
+    const data = {
+      form: {},
+      errors: {},
+      status,
+      users,
+      tags,
+    };
+
+    ctx.render('tasks/newTask', data);
   });
 
   router.post('addTask', '/tasks', ensureAuth, async (ctx) => {
     const { form } = ctx.request.body;
+
+    // console.log(form);
+
+    // ctx.redirect(router.url('newTask'));
+    // return;
 
     const status = await TaskStatus.findOne({ where: { name: 'New' } });
 
@@ -31,7 +50,6 @@ export default (router) => {
       ctx.flash.set(`Task "${task.name}" has been created`);
       ctx.redirect(router.url('tasks'));
     } catch (e) {
-      console.log(e);
       ctx.render('tasks/newTask', { form, errors: _.groupBy(e.errors, 'path') });
     }
   });

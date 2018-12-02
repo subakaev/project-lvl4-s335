@@ -10,7 +10,7 @@ block content
         +createInputGroup('name', 'text', 'Task name', form, errors, true)
         .form-group
           label(for='descriptionId') Description
-          textarea.form-control(name='form.description' value=form['description'] id='descriptionId')
+          textarea.form-control(name='form.description' id='descriptionId')
           if errors['description']
             .invalid-feedback= errors['description'].map(({ message }) => message).join('. ')
         .form-group

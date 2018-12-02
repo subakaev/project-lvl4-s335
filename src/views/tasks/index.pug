@@ -21,6 +21,9 @@ block content
               span.font-italic.text-muted no description
           hr.my-1
           p.m-0
+            span(style='font-size: .75rem') Status: 
+            span.badge.badge-secondary=task.TaskStatus.name
+          p.m-0
             span(style='font-size: .75rem') Creator: 
             span.badge.badge-secondary=task.Creator.email
           p.m-0

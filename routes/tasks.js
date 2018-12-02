@@ -62,23 +62,80 @@ export default (router) => {
   });
 
   router.get('editTask', '/tasks/:id/edit', async (ctx) => {
-    const task = await Task.findById(ctx.params.id);
+    const task = await Task.findOne({
+      where: { id: ctx.params.id },
+      include: [{ all: true, nested: true }],
+    });
 
-    ctx.render('tasks/editTask', { form: task, errors: {} });
+    const statuses = await TaskStatus.findAll();
+
+    const users = await User.findAll();
+
+    const tags = await Tag.findAll();
+
+    const data = {
+      form: {
+        id: task.id,
+        name: task.name,
+        description: task.description,
+        statusId: task.TaskStatus.id,
+        assignedToId: task.AssignedTo ? task.AssignedTo.id : null,
+        tags: task.Tags.map(x => `${x.id}`),
+      },
+      statuses,
+      users,
+      tags,
+      errors: {},
+    };
+
+    ctx.render('tasks/editTask', data);
   });
 
   router.put('updateTask', '/tasks/:id', ensureAuth, async (ctx) => {
     const { form } = ctx.request.body;
 
-    const current = await Task.findById(ctx.params.id);
+    const task = await Task.findOne({
+      where: { id: ctx.params.id },
+      include: [{ all: true, nested: true }],
+    });
+
+    const statuses = await TaskStatus.findAll();
+
+    const users = await User.findAll();
+
+    const tags = await Tag.findAll();
+
+    const data = {
+      form: {
+        id: task.id,
+        name: form.name,
+        description: form.description,
+        statusId: form.statusId,
+        assignedToId: form.assignedToId && form.assignedToId !== '0' ? form.assignedToId : null,
+        tags: form.tags,
+      },
+      statuses,
+      users,
+      tags,
+    };
 
     try {
-      await current.update(form);
+      await task.update(data.form);
+
+      const taskTags = await task.getTags();
+
+      if (taskTags.length > 0) {
+        await task.removeTags(taskTags);
+      }
+
+      if (form.tags && form.tags.length > 0) {
+        await task.setTags(data.form.tags);
+      }
 
       ctx.flash.set('Task has been updated');
       ctx.redirect(router.url('tasks'));
     } catch (e) {
-      ctx.render('tasks/editTask', { form: { ...form, id: ctx.params.id }, errors: _.groupBy(e.errors, 'path') });
+      ctx.render('tasks/editTask', { ...data, errors: _.groupBy(e.errors, 'path') });
     }
   });
 

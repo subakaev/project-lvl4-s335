@@ -120,7 +120,12 @@ describe('Tasks CRUD', () => {
   });
 
   it('PUT /tasks/:id 302 - successful update', async () => {
-    const data = { name: 'task1', statusId: 1, creatorId: 1 };
+    const data = {
+      name: 'task1',
+      statusId: 1,
+      creatorId: 1,
+      tags: [],
+    };
 
     await Task.bulkCreate([data]);
 
@@ -128,7 +133,7 @@ describe('Tasks CRUD', () => {
       .post('/tasks/1')
       .set('Cookie', cookies)
       .type('form')
-      .send({ _method: 'put', form: { name: 'task2' }, errors: {} });
+      .send({ _method: 'put', form: { ...data, name: 'task2' }, errors: {} });
 
     expect(res).toHaveHTTPStatus(302);
 

@@ -8,7 +8,7 @@ mixin createInputGroup(propName, inputType, labelMsg, dataObj, errors, showLabel
       .invalid-feedback= errors[propName].map(({ message }) => message).join('. ')
 
 mixin createSelectOption(value, name, selectedValue)
-  if selectedValue && `${value}` === selectedValue
+  if selectedValue && `${value}` === `${selectedValue}`
     option(value=value selected)=name
   else
     option(value=value)=name

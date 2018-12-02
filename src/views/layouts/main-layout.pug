@@ -37,5 +37,8 @@ html(lang="en")
     .container
       - const msg = flash.get()
       if msg
-        .alert.alert-info.m-3= msg
+        .alert.alert-info.alert-dismissible.fade.show.m-3(role='alert')
+          =msg
+          button.close(type='buton' data-dismiss='alert' aria-label='Close')
+            span(aria-hidden='true') &times;
       block content

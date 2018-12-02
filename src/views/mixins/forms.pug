@@ -1,8 +1,8 @@
-mixin createInputGroup(propName, inputType, labelMsg, dataObj, errors)
+mixin createInputGroup(propName, inputType, labelMsg, dataObj, errors, showLabel=false)
   .form-group
     - const className = errors[propName] && 'form-control is-invalid' || 'form-control'
     - const inputId = `input${propName}`
-    label(for= inputId class='sr-only')= labelMsg
+    label(for= inputId class=(showLabel ? '' : 'sr-only'))= labelMsg
     input(type= inputType name= `form.${propName}` value=dataObj[propName] id= inputId class= className placeholder= labelMsg)
     if errors[propName]
       .invalid-feedback= errors[propName].map(({ message }) => message).join('. ')

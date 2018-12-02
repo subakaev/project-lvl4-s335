@@ -1,51 +1,64 @@
 extends /layouts/main-layout.pug
 
 block content
-  .row
-    form.form-inline(action='' method='post' novalidate)
-      .form-check
-        input.form-check-input(type='checkbox' id='showMyTasksCheckBox')
-        label.form-check-label(for='showMyTasksCheckBox') Show my tasks
-      .form-group(style='maxHeight: 100px; overflow-y: auto')
-        label(for='selectTagsControl') Tags
-        select.form-control(id='selectTagsControl' multiple)
-          option 1
-          option 2
-          option 3
-          option 4
-          option 5
-      .form-group
-        label(for='selectStatusControl') Status
-        select.form-control(id='selectStatusControl')
-          option 1
-          option 2
-          option 3
-          option 4
-          option 5
-      .form-group
-        label(for='selectAssignedToControl') Status
-        select.form-control(id='selectAssignedToControl')
-          option 1
-          option 2
-          option 3
-          option 4
-          option 5
-      .form-group
-        a.btn.btn-outline-secondary(href='#') Reset
-        button.btn.btn-primary(type='submit') Apply
+  .row.justify-content-md-center
+    .col-6.my-3
+      a.btn.btn-primary.btn-sm(href=urlFor('tags')) Manage Tags
+      a.btn.btn-success.btn-sm.ml-2(href=urlFor('newTask')) Add Task
+    .col-6.my-3.text-right
+      button.btn.btn-primary.btn-sm(type='button' data-toggle='modal' data-target='#showFilter') Filter
 
-
-
-  .row
-    a.btn.btn-primary(href=urlFor('tags')) Manage Tags
-    a.btn.btn-primary(href=urlFor('newTask')) Add Task
-
-  .row
+  .row.justify-content-md-center
     each task in tasks
-      .card(style='width: 25%')
+      .card.m-1(style='width: 30%;')
+        .card-header.px-2.py-1
+          =task.name
         .card-body
-          h5.card-title=task.name
           p.card-text=task.description
         .card-footer
           a.card-link(href=urlFor('editTask', task.id)) Edit
           a.card-link.text-danger(href=urlFor('deleteTask', task.id) data-method='delete' rel='nofollow') Delete
+
+  .modal.fade(id='showFilter' tabIndex='-1' role='dialog' aria-labeledby='showFilterModalLabel' aria-hidden='true')
+    .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+          h5.modal-title(id='showFilterModalLabel') Task filter
+          button.close(type='button' data-dismiss='modal' aria-label='Close')
+            span(aria-hidden='true') &times;
+        .modal-body 
+          form.form-inline(action='' method='post' novalidate)
+            .form-check
+              input.form-check-input(type='checkbox' id='showMyTasksCheckBox')
+              label.form-check-label(for='showMyTasksCheckBox') Show my tasks
+            .form-group(style='maxHeight: 100px; overflow-y: auto')
+              label(for='selectTagsControl') Tags
+              select.form-control(id='selectTagsControl' multiple)
+                option 1
+                option 2
+                option 3
+                option 4
+                option 5
+            .form-group
+              label(for='selectStatusControl') Status
+              select.form-control(id='selectStatusControl')
+                option 1
+                option 2
+                option 3
+                option 4
+                option 5
+            .form-group
+              label(for='selectAssignedToControl') Status
+              select.form-control(id='selectAssignedToControl')
+                option 1
+                option 2
+                option 3
+                option 4
+                option 5
+            .form-group
+              a.btn.btn-outline-secondary(href='#') Reset
+              button.btn.btn-primary(type='submit') Apply
+        .modal-footer
+          a.btn.btn-outline-secondary.mr-3(data-dismiss='modal') Cancel
+
+  

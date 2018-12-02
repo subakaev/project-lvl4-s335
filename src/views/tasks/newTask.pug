@@ -2,14 +2,43 @@ extends /layouts/main-layout.pug
 
 include /mixins/forms.pug
 
+mixin createSelectOption(value, name, selectedValue)
+  if selectedValue && `${value}` === selectedValue
+    option(value=value selected)=name
+  else
+    option(value=value)=name
+
+mixin createMultiSelectOption(value, name, selectedValues)
+  if selectedValues && selectedValues.includes(`${value}`)
+    option(value=value selected)=name
+  else
+    option(value=value)=name
+
 block content
-  form(action=urlFor('addTask') method='post' novalidate)
-    h1.h5.my-3.text-center.font-weight-normal New task
-    +createInputGroup('name', 'text', 'Tag name', form, errors)
-    .form-group
-      label(for='descriptionId') Description
-      textarea.form-control(name='form.description' value=form['description'] id='descriptionId')
-      if errors['description']
-        .invalid-feedback= errors['description'].map(({ message }) => message).join('. ')
-    .form-group
-      button(class='btn btn-lg btn-primary btn-block' type='submit') Create
+  .row.justify-content-md-center
+    .col-md-5.my-3
+      form(action=urlFor('addTask') method='post' novalidate)
+        h5.my-3.text-center.font-weight-normal New task
+        +createInputGroup('name', 'text', 'Task name', form, errors, true)
+        .form-group
+          label(for='descriptionId') Description
+          textarea.form-control(name='form.description' value=form['description'] id='descriptionId')
+          if errors['description']
+            .invalid-feedback= errors['description'].map(({ message }) => message).join('. ')
+        .form-group
+          label(for='statusControlId') Status
+          select.form-control(id='statusControlId' name='form.statusId')
+            option(value=status.id selected)=status.name
+        .form-group
+          label(for='assignedToControlId') Assign to
+          select.form-control(id='assignedToControlId' name='form.assignedToId')
+            option(value=0) Select...
+            each user in users
+              +createSelectOption(user.id, user.email, form.assignedToId)
+        .form-group(style='maxHeight: 100px; overflow-y: auto')
+          label(for='tagsControlId') Tags
+          select.form-control(id='tagsControlId' name='form.tags' multiple)
+            each tag in tags
+              +createMultiSelectOption(tag.id, tag.name, form.tags)
+        .form-group
+          button(class='btn btn-lg btn-primary' type='submit') Create

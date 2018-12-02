@@ -32,25 +32,31 @@ export default (router) => {
   router.post('addTask', '/tasks', ensureAuth, async (ctx) => {
     const { form } = ctx.request.body;
 
-    // console.log(form);
-
-    // ctx.redirect(router.url('newTask'));
-    // return;
-
     const status = await TaskStatus.findOne({ where: { name: 'New' } });
+
+    const users = await User.findAll();
+
+    const tags = await Tag.findAll();
+
+    const addedTags = await Tag.findAll({ where: { id: form.tags } });
+    console.log(form);
 
     const task = Task.build({
       ...form,
-      statusId: status.id,
+      assignedToId: form.assignedToId === '0' ? null : form.assignedToId,
       creatorId: ctx.session.user.id,
     });
 
     try {
       await task.save();
+
+      console.log('SET TAGS');
+      await task.addTags(addedTags);
       ctx.flash.set(`Task "${task.name}" has been created`);
       ctx.redirect(router.url('tasks'));
     } catch (e) {
-      ctx.render('tasks/newTask', { form, errors: _.groupBy(e.errors, 'path') });
+      console.log(e);
+      ctx.render('tasks/newTask', { form, status, users, tags, errors: _.groupBy(e.errors, 'path') });
     }
   });
 

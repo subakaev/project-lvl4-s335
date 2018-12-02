@@ -6,3 +6,15 @@ mixin createInputGroup(propName, inputType, labelMsg, dataObj, errors, showLabel
     input(type= inputType name= `form.${propName}` value=dataObj[propName] id= inputId class= className placeholder= labelMsg)
     if errors[propName]
       .invalid-feedback= errors[propName].map(({ message }) => message).join('. ')
+
+mixin createSelectOption(value, name, selectedValue)
+  if selectedValue && `${value}` === selectedValue
+    option(value=value selected)=name
+  else
+    option(value=value)=name
+
+mixin createMultiSelectOption(value, name, selectedValues)
+  if selectedValues && selectedValues.includes(`${value}`)
+    option(value=value selected)=name
+  else
+    option(value=value)=name

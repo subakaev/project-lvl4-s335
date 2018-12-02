@@ -2,18 +2,6 @@ extends /layouts/main-layout.pug
 
 include /mixins/forms.pug
 
-mixin createSelectOption(value, name, selectedValue)
-  if selectedValue && `${value}` === selectedValue
-    option(value=value selected)=name
-  else
-    option(value=value)=name
-
-mixin createMultiSelectOption(value, name, selectedValues)
-  if selectedValues && selectedValues.includes(`${value}`)
-    option(value=value selected)=name
-  else
-    option(value=value)=name
-
 block content
   .row.justify-content-md-center
     .col-md-5.my-3

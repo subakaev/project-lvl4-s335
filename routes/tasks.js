@@ -26,8 +26,6 @@ export default (router) => {
       creatorId: ctx.session.user.id,
     });
 
-    console.log(task);
-
     try {
       await task.save();
       ctx.flash.set(`Task "${task.name}" has been created`);
@@ -40,8 +38,6 @@ export default (router) => {
 
   router.get('editTask', '/tasks/:id/edit', async (ctx) => {
     const task = await Task.findById(ctx.params.id);
-
-    console.log(task);
 
     ctx.render('tasks/editTask', { form: task, errors: {} });
   });

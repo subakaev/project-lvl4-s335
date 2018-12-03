@@ -14,7 +14,7 @@ mixin createSelectOption(value, name, selectedValue)
     option(value=value)=name
 
 mixin createMultiSelectOption(value, name, selectedValues)
-  if selectedValues && selectedValues.includes(`${value}`)
+  if selectedValues && (selectedValues.includes(`${value}`) || selectedValues.includes(value))
     option(value=value selected)=name
   else
     option(value=value)=name

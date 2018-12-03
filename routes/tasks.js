@@ -6,47 +6,19 @@ import {
   Task, TaskStatus, User, Tag,
 } from '../models';
 
+import {
+  getDefaultFilter, getFilterFromFormData, applyFilter, getFilterDescription,
+} from '../lib/taskFilter';
+
 export default (router) => {
   router.get('tasks', '/tasks', ensureAuth, async (ctx) => {
     const tasks = await Task.findAll({ include: [{ all: true, nested: true }] });
 
-    const filter = ctx.session.filter || {
-      showMyTasks: false,
-      statusId: null,
-      assignedToId: null,
-      tags: [],
-    };
+    const filter = ctx.session.filter || getDefaultFilter();
 
-    const filtered = _
-      .chain(tasks)
-      .filter(x => ((filter.showMyTasks || false) ? x.creatorId === ctx.session.user.id : true))
-      .filter(x => (filter.assignedToId ? `${x.assignedToId}` === filter.assignedToId : true))
-      .filter(x => (filter.statusId ? `${x.statusId}` === filter.statusId : true))
-      .filter(x => (filter.tags && filter.tags.length > 0
-        ? _.some(filter.tags || [], item => _.includes(_.map(x.Tags, t => `${t.id}`), item))
-        : true))
-      .value();
+    const filtered = applyFilter(tasks, filter, ctx.session.user.id);
 
-    let filterDescription = `Show ${filter.showMyTasks ? 'only my tasks' : 'all users tasks'}`;
-
-    if (filter.assignedToId) {
-      const user = await User.findOne({ where: { id: filter.assignedToId } });
-      filterDescription = `${filterDescription}, assigned to: ${user.email}`;
-    }
-
-    if (filter.statusId) {
-      console.log(_.toNumber(filter.statusId));
-      const status = await TaskStatus.findByPk(_.toNumber(filter.statusId));
-      console.log(status);
-      filterDescription = `${filterDescription}, with status: ${status.name}`;
-    }
-
-    if (filter.tags && filter.tags.length > 0) {
-      const tags1 = await Tag.findAll({ where: { id: filter.tags } });
-
-      const tagNames = _.map(tags1, x => x.name).join(',');
-      filterDescription = `${filterDescription}, with tags: ${tagNames}`;
-    }
+    const filterDescription = await getFilterDescription(filter, ctx.session.user.name);
 
     const statuses = await TaskStatus.findAll();
     const users = await User.findAll();
@@ -67,23 +39,13 @@ export default (router) => {
   router.post('filterTasks', '/tasks/filter', ensureAuth, async (ctx) => {
     const { form } = ctx.request.body;
 
-    ctx.session.filter = {
-      showMyTasks: form.showMyTasks,
-      statusId: form.statusId !== '0' ? form.statusId : null,
-      assignedToId: form.assignedToId !== '0' ? form.assignedToId : null,
-      tags: form.tags,
-    };
+    ctx.session.filter = getFilterFromFormData(form);
 
     ctx.redirect(router.url('tasks'));
   });
 
   router.delete('clearTaskFilter', '/tasks/filter', ensureAuth, (ctx) => {
-    ctx.session.filter = {
-      showMyTasks: false,
-      statusId: null,
-      assignedToId: null,
-      tags: [],
-    };
+    ctx.session.filter = getDefaultFilter();
 
     ctx.redirect(router.url('tasks'));
   });

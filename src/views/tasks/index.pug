@@ -13,14 +13,32 @@ mixin createCheckBoxGroup(id, name, title, value)
     +createCheckBoxInput(id, name, value)
     label.form-check-label(for=id)=title
 
+mixin showFilterDescription(description)
+  - const fontSize = 'font-size: .75rem';
+  span(style=fontSize) Show 
+  - const desc = (description.showMyTasks ? 'my tasks' : 'all tasks')
+  span.font-weight-bold(style=fontSize)=desc
+  if description.assignedToName
+    span(style=fontSize) , assigned to: 
+    span.badge.badge-success=description.assignedToName
+  if description.status
+    span(style=fontSize) , with status: 
+    span.badge.badge-secondary=description.status
+  if description.tagNames
+    span(style=fontSize) , with tags: 
+    each tag in description.tagNames
+      span.badge.badge-primary.ml-1=tag
+
 block content
   .row.justify-content-md-center
-    .col-6.my-3
+    .col-12.mt-3.text-right
+      +showFilterDescription(filterDescription)
+      a.btn.btn-outline-secondary.btn-sm.ml-1(href=urlFor('clearTaskFilter') data-method='delete' rel='nofollow') Reset
+      button.btn.btn-primary.btn-sm(type='button' data-toggle='modal' data-target='#showFilter') Filter
+  .row.justify-content-md-center
+    .col-12.mb-3.text-left
       a.btn.btn-primary.btn-sm(href=urlFor('tags')) Manage Tags
       a.btn.btn-success.btn-sm.ml-2(href=urlFor('newTask')) Add Task
-    .col-6.my-3.text-right
-      span(style='font-size: .75rem')=filterDescription
-      button.btn.btn-primary.btn-sm(type='button' data-toggle='modal' data-target='#showFilter') Filter
 
   .row.justify-content-md-center
     each task in tasks
@@ -86,5 +104,5 @@ block content
                       +createMultiSelectOption(tag.id, tag.name, form.tags)
                 +createCheckBoxGroup('showMyTasksCheckBoxId', 'form.showMyTasks', 'Show my tasks', form.showMyTasks)
           .modal-footer
-            a.btn.btn-outline-secondary(href=urlFor('clearTaskFilter') data-method='delete' rel='nofollow') Reset
+            a.btn.btn-outline-secondary(data-dismiss='modal') Close
             button.btn.btn-primary(type='submit') Apply  

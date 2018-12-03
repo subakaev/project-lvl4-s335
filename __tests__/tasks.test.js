@@ -59,6 +59,24 @@ describe('Tasks CRUD', () => {
     expect(res).toHaveHTTPStatus(200);
   });
 
+  it('POST /tasks/filter 302', async () => {
+    const res = await request.agent(server)
+      .post('/tasks/filter')
+      .set('Cookie', cookies)
+      .type('form')
+      .send({ form: { showMyTasks: true }, errors: {} });
+
+    expect(res).toHaveHTTPStatus(302);
+  });
+
+  it('DELETE /tasks/filter 302', async () => {
+    const res = await request.agent(server)
+      .delete('/tasks/filter')
+      .set('Cookie', cookies);
+
+    expect(res).toHaveHTTPStatus(302);
+  });
+
   it('GET /tasks/new 200', async () => {
     const res = await request.agent(server)
       .get('/tasks/new')

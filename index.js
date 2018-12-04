@@ -34,7 +34,9 @@ export default () => {
   app.use(session(app));
   app.use(flash());
   app.use(async (ctx, next) => {
-    const user = ctx.session.isNew ? { isAuthenticated: false } : ctx.session.user;
+    const user = ctx.session.isNew || !ctx.session.user
+      ? { isAuthenticated: false }
+      : ctx.session.user;
     ctx.state = {
       flash: ctx.flash,
       user,

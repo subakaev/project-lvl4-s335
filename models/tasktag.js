@@ -1,10 +1,10 @@
 module.exports = (sequelize, DataTypes) => {
   const TaskTag = sequelize.define('TaskTag', {
-    TaskId: {
+    taskId: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    TagId: {
+    tagId: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },

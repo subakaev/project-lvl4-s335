@@ -7,6 +7,8 @@ import validateForm from '../lib/formValidators';
 
 import ensureAuth from '../middlewares/ensureAuthMiddleware';
 
+import { getDefaultFilter } from '../lib/taskFilter';
+
 export default (router) => {
   router.get('newSession', '/session/new', (ctx) => {
     ctx.render('auth/login', { form: {}, errors: {} });
@@ -45,6 +47,7 @@ export default (router) => {
 
   router.delete('session', '/session', (ctx) => {
     ctx.session.user = { isAuthenticated: false };
+    ctx.session.filter = getDefaultFilter();
     ctx.redirect(router.url('root'));
   });
 

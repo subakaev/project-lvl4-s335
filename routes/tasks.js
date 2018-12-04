@@ -136,28 +136,14 @@ export default (router) => {
       include: [{ all: true, nested: true }],
     });
 
-    const statuses = await TaskStatus.findAll();
-
-    const users = await User.findAll();
-
-    const tags = await Tag.findAll();
-
-    const data = {
-      form: {
-        id: task.id,
-        name: form.name,
-        description: form.description,
-        statusId: form.statusId,
-        assignedToId: form.assignedToId && form.assignedToId !== '0' ? form.assignedToId : null,
-        tags: form.tags,
-      },
-      statuses,
-      users,
-      tags,
+    const updateTaskData = {
+      ...form,
+      id: task.id,
+      assignedToId: _.toNumber(form.assignedToId) > 0 ? form.assignedToId : null,
     };
 
     try {
-      await task.update(data.form);
+      await task.update(updateTaskData);
 
       const taskTags = await task.getTags();
 
@@ -166,12 +152,25 @@ export default (router) => {
       }
 
       if (form.tags && form.tags.length > 0) {
-        await task.setTags(data.form.tags);
+        await task.setTags(form.tags);
       }
 
       ctx.flash.set('Task has been updated');
       ctx.redirect(router.url('tasks'));
     } catch (e) {
+      const statuses = await TaskStatus.findAll();
+
+      const users = await User.findAll();
+
+      const tags = await Tag.findAll();
+
+      const data = {
+        form: updateTaskData,
+        statuses,
+        users,
+        tags,
+      };
+
       ctx.render('tasks/editTask', { ...data, errors: _.groupBy(e.errors, 'path') });
     }
   });

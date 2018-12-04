@@ -8,25 +8,9 @@ block content
       form(action=urlFor('addTask') method='post' novalidate)
         h5.my-3.text-center.font-weight-normal New task
         +createInputGroup('name', 'text', 'Task name', form, errors, true)
-        .form-group
-          label(for='descriptionId') Description
-          textarea.form-control(name='form.description' id='descriptionId')
-          if errors['description']
-            .invalid-feedback= errors['description'].map(({ message }) => message).join('. ')
-        .form-group
-          label(for='statusControlId') Status
-          select.form-control(id='statusControlId' name='form.statusId')
-            option(value=status.id selected)=status.name
-        .form-group
-          label(for='assignedToControlId') Assign to
-          select.form-control(id='assignedToControlId' name='form.assignedToId')
-            option(value=0) Select...
-            each user in users
-              +createSelectOption(user.id, user.email, form.assignedToId)
-        .form-group(style='maxHeight: 100px; overflow-y: auto')
-          label(for='tagsControlId') Tags
-          select.form-control(id='tagsControlId' name='form.tags' multiple)
-            each tag in tags
-              +createMultiSelectOption(tag.id, tag.name, form.tags)
+        +createTextAreaGroup('description', 'Description', form, errors)
+        +createComboBox('statusId', 'Status', [status], form, x => x.id, x => x.name, false)
+        +createComboBox('assignedToId', 'Assign to', users, form, x => x.id, x => x.email, true)
+        +createMultiselectListBox('tags', 'Tags', tags, form, x => x.id, x => x.name)
         .form-group
           button(class='btn btn-lg btn-primary' type='submit') Create

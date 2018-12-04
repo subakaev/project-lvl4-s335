@@ -2,17 +2,6 @@ extends /layouts/main-layout.pug
 
 include /mixins/forms.pug
 
-mixin createCheckBoxInput(id, name, value)
-  if value
-    input.form-check-input(type='checkbox' id=id name=name checked)
-  else
-    input.form-check-input(type='checkbox' id=id name=name)
-
-mixin createCheckBoxGroup(id, name, title, value)
-  .form-check
-    +createCheckBoxInput(id, name, value)
-    label.form-check-label(for=id)=title
-
 mixin showFilterDescription(description)
   - const fontSize = 'font-size: .75rem';
   span(style=fontSize) Show 

@@ -7,6 +7,14 @@ mixin createInputGroup(propName, inputType, labelMsg, dataObj, errors, showLabel
     if errors[propName]
       .invalid-feedback= errors[propName].map(({ message }) => message).join('. ')
 
+mixin createTextAreaGroup(propName, labelMsg, dataObj, errors)
+  - const controlId = `textarea${propName}Id`
+  .form-group
+    label(for=controlId) Description
+    textarea.form-control(name=`form.${propName}` id=controlId)=dataObj[propName]
+    if errors[propName]
+      .invalid-feedback= errors[propName].map(({ message }) => message).join('. ')
+
 mixin createSelectOption(value, name, selectedValue)
   if selectedValue && `${value}` === `${selectedValue}`
     option(value=value selected)=name
@@ -18,3 +26,32 @@ mixin createMultiSelectOption(value, name, selectedValues)
     option(value=value selected)=name
   else
     option(value=value)=name
+
+mixin createComboBox(propName, labelMsg, coll, dataObj, getIdFn, getNameFn, isEmptyOption = false)
+  - const controlId = `control${propName}Id`;
+  .form-group
+    label(for=controlId)=labelMsg
+    select.form-control(id=controlId name=`form.${propName}`)
+      if (isEmptyOption)
+        option(value=0) Select...
+      each item in coll
+        +createSelectOption(getIdFn(item), getNameFn(item), dataObj[propName])
+
+mixin createMultiselectListBox(propName, labelMsg, coll, dataObj, getIdFn, getNameFn, height = '100px')
+  - const controlId = `control${propName}Id`;
+  .form-group(style=`maxHeight: ${height}; overflow-y: auto`)
+    label(for=controlId)=labelMsg
+    select.form-control(id=controlId name=`form.${propName}` multiple)
+      each item in coll
+        +createMultiSelectOption(getIdFn(item), getNameFn(item), dataObj[propName])
+
+mixin createCheckBoxInput(id, name, value)
+  if value
+    input.form-check-input(type='checkbox' id=id name=name checked)
+  else
+    input.form-check-input(type='checkbox' id=id name=name)
+
+mixin createCheckBoxGroup(id, name, title, value)
+  .form-check
+    +createCheckBoxInput(id, name, value)
+    label.form-check-label(for=id)=title

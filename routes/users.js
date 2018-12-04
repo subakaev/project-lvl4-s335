@@ -154,7 +154,9 @@ export default (router) => {
     await user.destroy();
 
     ctx.session.user = { isAuthenticated: false };
+
     ctx.flash.set('User has been deleted');
+
     ctx.redirect(router.url('root'));
   });
 };

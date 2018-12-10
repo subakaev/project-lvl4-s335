@@ -105,7 +105,6 @@ export default (router) => {
       ctx.flash.set(`Task "${task.name}" has been created`);
       ctx.redirect(router.url('tasks'));
     } catch (e) {
-      console.log(e);
       ctx.render('tasks/newTask', {
         form, status, users, errors: _.groupBy(e.errors, 'path'),
       });

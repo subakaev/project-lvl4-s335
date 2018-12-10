@@ -2,28 +2,37 @@ extends /layouts/main-layout.pug
 
 include /mixins/forms.pug
 
-mixin showFilterDescription(description)
-  - const fontSize = 'font-size: .75rem';
-  span(style=fontSize) Show 
-  - const desc = (description.showMyTasks ? 'my tasks' : 'all tasks')
-  span.font-weight-bold(style=fontSize)=desc
-  if description.assignedToName
-    span(style=fontSize) , assigned to: 
-    span.badge.badge-success=description.assignedToName
-  if description.status
-    span(style=fontSize) , with status: 
-    span.badge.badge-secondary=description.status
-  if description.tagNames
-    span(style=fontSize) , with tags: 
-    each tag in description.tagNames
-      span.badge.badge-primary.ml-1=tag
-
 block content
   .row.justify-content-md-center
-    .col-12.mt-3.text-right
-      +showFilterDescription(filterDescription)
-      a.btn.btn-outline-secondary.btn-sm.ml-1(href=urlFor('clearTaskFilter') data-method='delete' rel='nofollow') Reset
-      button.btn.btn-primary.btn-sm(type='button' data-toggle='modal' data-target='#showFilter') Filter
+    .col-12.mt-3
+      form(action=urlFor('filterTasks') method='post' novalidate)
+        .row 
+          .col-2
+            .form-group
+              label(for='selectStatusControl') Status
+              select.form-control(id='selectStatusControl' name='form.statusId')
+                option(value=0) None
+                each status in statuses
+                  +createSelectOption(status.id, status.name, form.statusId)
+          .col-2
+            .form-group
+              label(for='selectAssignedToControl') Assigned to
+              select.form-control(id='selectAssignedToControl' name='form.assignedToId')
+                option(value=0) None
+                each user in users
+                  +createSelectOption(user.id, user.email, form.assignedToId)
+          .col-2
+            .form-group(style='maxHeight: 150px; overflow-y: auto')
+              label(for='selectTagsControl') Tags
+              select.form-control(id='selectTagsControl' name='form.tags' multiple)
+                each tag in tags
+                  +createMultiSelectOption(tag.id, tag.name, form.tags)
+          .col-2
+            +createCheckBoxGroup('showMyTasksCheckBoxId', 'form.showMyTasks', 'Show my tasks', form.showMyTasks)
+          .col-2
+            .form-group
+              button.btn.btn-primary(type='submit') Apply
+              a.btn.btn-outline-secondary.ml-1(href=urlFor('clearTaskFilter') data-method='delete' rel='nofollow') Clear
   .row.justify-content-md-center
     .col-12.mb-3.text-left
       a.btn.btn-primary.btn-sm(href=urlFor('tags')) Manage Tags
@@ -61,37 +70,3 @@ block content
         .card-footer.px-2.py-1
           a.card-link(href=urlFor('editTask', task.id)) Edit
           a.card-link.text-danger(href=urlFor('deleteTask', task.id) data-method='delete' rel='nofollow') Delete
-
-  .modal.fade(id='showFilter' tabIndex='-1' role='dialog' aria-labeledby='showFilterModalLabel' aria-hidden='true')
-    .modal-dialog(role='document')
-      .modal-content
-        .modal-header
-          h5.modal-title(id='showFilterModalLabel') Task filter
-          button.close(type='button' data-dismiss='modal' aria-label='Close')
-            span(aria-hidden='true') &times;
-        form(action=urlFor('filterTasks') method='post' novalidate)
-          .modal-body 
-            .row 
-              .col-6
-                .form-group
-                  label(for='selectStatusControl') Status
-                  select.form-control(id='selectStatusControl' name='form.statusId')
-                    option(value=0) None
-                    each status in statuses
-                     +createSelectOption(status.id, status.name, form.statusId)
-                .form-group
-                  label(for='selectAssignedToControl') Assigned to
-                  select.form-control(id='selectAssignedToControl' name='form.assignedToId')
-                    option(value=0) None
-                    each user in users
-                      +createSelectOption(user.id, user.email, form.assignedToId)
-              .col-6
-                .form-group(style='maxHeight: 150px; overflow-y: auto')
-                  label(for='selectTagsControl') Tags
-                  select.form-control(id='selectTagsControl' name='form.tags' multiple)
-                    each tag in tags
-                      +createMultiSelectOption(tag.id, tag.name, form.tags)
-                +createCheckBoxGroup('showMyTasksCheckBoxId', 'form.showMyTasks', 'Show my tasks', form.showMyTasks)
-          .modal-footer
-            a.btn.btn-outline-secondary(data-dismiss='modal') Close
-            button.btn.btn-primary(type='submit') Apply  

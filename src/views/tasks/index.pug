@@ -25,9 +25,9 @@ block content
             .form-group
               label(for='inputTags') Tags
               input.form-control(type='text' name='form.tags' id='inputTags' value=form.tags)
-          .col-2
+          .col-2.d-flex.align-items-end.mb-3
             +createCheckBoxGroup('showMyTasksCheckBoxId', 'form.showMyTasks', 'Show my tasks', form.showMyTasks)
-          .col-2
+          .col-2.d-flex.align-items-end
             .form-group
               button.btn.btn-primary(type='submit') Apply
               a.btn.btn-outline-secondary.ml-1(href=urlFor('clearTaskFilter') data-method='delete' rel='nofollow') Clear

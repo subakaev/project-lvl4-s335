@@ -10,6 +10,24 @@ import {
   getDefaultFilter, getFilterFromFormData, applyFilter, getFilterDescription,
 } from '../lib/taskFilter';
 
+const getFilteredTags = async (tagsString = '') => {
+  const parsedTagNames = tagsString.split(',').map(x => x.trim()).filter(x => x);
+
+  const allTags = await Tag.findAll();
+
+  const groupedTags = _.groupBy(allTags, x => x.name);
+
+  const newTags = _
+    .chain(parsedTagNames)
+    .filter(x => !_.has(groupedTags, x))
+    .map(x => ({ name: x }))
+    .value();
+
+  const existedTags = await Tag.findAll({ where: { name: parsedTagNames } });
+
+  return { newTags, existedTags };
+};
+
 export default (router) => {
   router.get('tasks', '/tasks', ensureAuth, async (ctx) => {
     const tasks = await Task.findAll({ include: [{ all: true, nested: true }] });
@@ -22,13 +40,11 @@ export default (router) => {
 
     const statuses = await TaskStatus.findAll();
     const users = await User.findAll();
-    const tags = await Tag.findAll();
 
     const model = {
       tasks: filtered,
       statuses,
       users,
-      tags,
       form: filter,
       filterDescription,
     };
@@ -55,14 +71,11 @@ export default (router) => {
 
     const users = await User.findAll();
 
-    const tags = await Tag.findAll();
-
     const data = {
       form: {},
       errors: {},
       status,
       users,
-      tags,
     };
 
     ctx.render('tasks/newTask', data);
@@ -75,10 +88,6 @@ export default (router) => {
 
     const users = await User.findAll();
 
-    const tags = await Tag.findAll();
-
-    const addedTags = await Tag.findAll({ where: { id: form.tags } });
-
     const task = Task.build({
       ...form,
       assignedToId: form.assignedToId === '0' ? null : form.assignedToId,
@@ -88,12 +97,20 @@ export default (router) => {
     try {
       await task.save();
 
-      await task.addTags(addedTags);
+      const { newTags, existedTags } = await getFilteredTags(form.tags);
+
+      await task.addTags(existedTags);
+
+      const addTagPromises = newTags.map(async x => task.createTag(x));
+
+      await Promise.all(addTagPromises);
+
       ctx.flash.set(`Task "${task.name}" has been created`);
       ctx.redirect(router.url('tasks'));
     } catch (e) {
+      console.log(e);
       ctx.render('tasks/newTask', {
-        form, status, users, tags, errors: _.groupBy(e.errors, 'path'),
+        form, status, users, errors: _.groupBy(e.errors, 'path'),
       });
     }
   });
@@ -108,8 +125,6 @@ export default (router) => {
 
     const users = await User.findAll();
 
-    const tags = await Tag.findAll();
-
     const data = {
       form: {
         id: task.id,
@@ -117,11 +132,10 @@ export default (router) => {
         description: task.description,
         statusId: task.TaskStatus.id,
         assignedToId: task.AssignedTo ? task.AssignedTo.id : null,
-        tags: task.Tags.map(x => `${x.id}`),
+        tags: task.Tags.map(x => x.name).join(','),
       },
       statuses,
       users,
-      tags,
       errors: {},
     };
 
@@ -151,9 +165,13 @@ export default (router) => {
         await task.removeTags(taskTags);
       }
 
-      if (form.tags && form.tags.length > 0) {
-        await task.setTags(form.tags);
-      }
+      const { newTags, existedTags } = await getFilteredTags(form.tags);
+
+      await task.addTags(existedTags);
+
+      const addTagPromises = newTags.map(async x => task.createTag(x));
+
+      await Promise.all(addTagPromises);
 
       ctx.flash.set('Task has been updated');
       ctx.redirect(router.url('tasks'));

@@ -11,6 +11,6 @@ block content
         +createTextAreaGroup('description', 'Description', form, errors)
         +createComboBox('statusId', 'Status', [status], form, x => x.id, x => x.name, false)
         +createComboBox('assignedToId', 'Assign to', users, form, x => x.id, x => x.email, true)
-        +createMultiselectListBox('tags', 'Tags', tags, form, x => x.id, x => x.name)
+        +createInputGroup('tags', 'text', 'Tags', form, errors, true)
         .form-group
-          button(class='btn btn-lg btn-primary' type='submit') Create
+          button.btn.btn-primary(type='submit') Create task

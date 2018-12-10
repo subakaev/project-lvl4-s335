@@ -12,7 +12,7 @@ block content
         +createTextAreaGroup('description', 'Description', form, errors)
         +createComboBox('statusId', 'Status', statuses, form, x => x.id, x => x.name, false)
         +createComboBox('assignedToId', 'Assign to', users, form, x => x.id, x => x.email, true)
-        +createMultiselectListBox('tags', 'Tags', tags, form, x => x.id, x => x.name)
+        +createInputGroup('tags', 'text', 'Tags', form, errors, true)
         .d-flex
           button.btn.btn-primary(type='submit') Update task
           .ml-auto

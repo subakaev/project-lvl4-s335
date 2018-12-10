@@ -21,7 +21,7 @@ export default (router) => {
     const result = validateForm('login', form);
 
     if (result) {
-      ctx.render('auth/login', { form, errors: result });
+      ctx.render('auth/login', { form: { userName: form.userName }, errors: result });
       return;
     }
 
@@ -41,7 +41,7 @@ export default (router) => {
       return;
     }
 
-    const data = { form, errors: createValidationError('summary', 'User name or password is incorrect') };
+    const data = { form: { userName: form.userName }, errors: createValidationError('summary', 'User name or password is incorrect') };
 
     ctx.render('auth/login', data);
   });

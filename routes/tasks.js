@@ -7,7 +7,7 @@ import {
 } from '../models';
 
 import {
-  getDefaultFilter, getFilterFromFormData, applyFilter, getFilterDescription,
+  getDefaultFilter, getFilterFromFormData, applyFilter,
 } from '../lib/taskFilter';
 
 const getFilteredTags = async (tagsString = '') => {
@@ -36,8 +36,6 @@ export default (router) => {
 
     const filtered = applyFilter(tasks, filter, ctx.session.user.id);
 
-    const filterDescription = await getFilterDescription(filter, ctx.session.user.name);
-
     const statuses = await TaskStatus.findAll();
     const users = await User.findAll();
 
@@ -46,7 +44,6 @@ export default (router) => {
       statuses,
       users,
       form: filter,
-      filterDescription,
     };
 
     ctx.render('tasks/index', model);

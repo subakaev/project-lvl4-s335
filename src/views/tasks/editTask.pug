@@ -3,15 +3,30 @@ extends /layouts/main-layout.pug
 include /mixins/forms.pug
 
 block content
-  .row.justify-content-md-center
-    .col-md-5.my-3
+  .row.justify-content-md-center.my-3
+    .col-5
       form(action=urlFor('updateTask', form.id) method='post' novalidate)
-        h5.my-3.text-center.font-weight-normal New task
+        h5.my-3.text-center.font-weight-normal Edit task
         input(name='_method' type='hidden' value='put')
         +createInputGroup('name', 'text', 'Task name', form, errors, true)
         +createTextAreaGroup('description', 'Description', form, errors)
         +createComboBox('statusId', 'Status', statuses, form, x => x.id, x => x.name, false)
         +createComboBox('assignedToId', 'Assign to', users, form, x => x.id, x => x.email, true)
         +createMultiselectListBox('tags', 'Tags', tags, form, x => x.id, x => x.name)
-        .form-group
-          button.btn.btn-primary(type='submit') Update
+        .d-flex
+          button.btn.btn-primary(type='submit') Update task
+          .ml-auto
+            button.btn.btn-danger.btn-block(type='button' data-toggle='modal' data-target='#deleteTask') Delete task
+
+  .modal.fade(id='deleteTask' tabIndex='-1' role='dialog' aria-labeledby='deleteUserModalLabel' aria-hidden='true')
+    .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+          h5.modal-title(id='deleteUserModalLabel') Delete task confirmation
+          button.close(type='button' data-dismiss='modal' aria-label='Close')
+            span(aria-hidden='true') &times;
+        .modal-body Delete task? The operation is permanent.
+        .modal-footer
+          a.btn.btn-outline-secondary.mr-3(data-dismiss='modal') Cancel
+          a.btn.btn-danger.mr-3(href=urlFor('deleteTask', form.id) data-method='delete' rel='nofollow') Delete
+        
